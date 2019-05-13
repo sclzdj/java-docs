@@ -1331,8 +1331,19 @@ package包关键字，在java中，有包的概念，主要是用来归类 分�
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec05;` `import` `com.java1234.chap03.sec04.People;` `public` `class` `Demo2 {` `    ``public` `static` `void` `main(String[] args) {``        ``People zhangsan=``new` `People();``    ``}``}`
+package com.java1234.chap03.sec05;
+ 
+import com.java1234.chap03.sec04.People;
+ 
+public class Demo2 {
+ 
+    public static void main(String[] args) {
+        People zhangsan=new People();
+    }
+}
 ```
+
+
 
 
 
@@ -1345,6 +1356,22 @@ package包关键字，在java中，有包的概念，主要是用来归类 分�
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec05;` `import` `com.java1234.chap03.sec04.People;` `public` `class` `Demo2 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 不同的包下，则需要用import导入``        ``People zhangsan=``new` `People();``        ``// 相同的包下，则不需要用import导入``        ``Demo1 demo1=``new` `Demo1();``    ``}``}`
+package com.java1234.chap03.sec05;
+ 
+import com.java1234.chap03.sec04.People;
+ 
+public class Demo2 {
+ 
+    public static void main(String[] args) {
+        // 不同的包下，则需要用import导入
+        People zhangsan=new People();
+        // 相同的包下，则不需要用import导入
+        Demo1 demo1=new Demo1();
+    }
+}
 ```
+
+
+
+
 
