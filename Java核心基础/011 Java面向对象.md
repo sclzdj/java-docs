@@ -1270,8 +1270,6 @@ public class Demo3 {
 
 
 
-
-
 输出：
 
 静态代码块！
@@ -1289,4 +1287,64 @@ public class Demo3 {
 构造方法三
 
 
+
+
+
+### package import关键字
+
+
+
+package包关键字，在java中，有包的概念，主要是用来归类 分类作用；
+
+便于项目的开发和维护；
+
+
+
+这里截取随便截取一个我最近在开发的一个开源工作流项目：
+
+![1473426638640000524.jpg](assets/1473426638640000524.jpg)
+
+
+
+这里的话 我们会看到dao service util controller包 这些包里都放着一些类，通过分包，可以很清晰的来管理类；
+
+
+
+我们新建一个类Demo2：
+
+
+
+![1473426787280063607.jpg](assets/1473426787280063607.jpg)
+
+在开头有个 package com.java1234.chap03.sec05; 指定了该类的包路径；
+
+
+
+假如我们这个类里要引入sec04里的People类，我们要用到import导入包关键字；
+
+我们先把People类里的构造方法改成公有，不然外面不能访问；
+
+![1473426970077015682.jpg](assets/1473426970077015682.jpg)
+
+
+
+上代码：
+
+```java
+`package` `com.java1234.chap03.sec05;` `import` `com.java1234.chap03.sec04.People;` `public` `class` `Demo2 {` `    ``public` `static` `void` `main(String[] args) {``        ``People zhangsan=``new` `People();``    ``}``}`
+```
+
+
+
+这里的import com.java1234.chap03.sec04.People; 就是我们导入的包路径；
+
+
+
+假如是同一个包中的类 是不需要用import导入的；
+
+上代码：
+
+```java
+`package` `com.java1234.chap03.sec05;` `import` `com.java1234.chap03.sec04.People;` `public` `class` `Demo2 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 不同的包下，则需要用import导入``        ``People zhangsan=``new` `People();``        ``// 相同的包下，则不需要用import导入``        ``Demo1 demo1=``new` `Demo1();``    ``}``}`
+```
 
