@@ -81,14 +81,44 @@ Java面向对象三大特性；
 看下面实例
 
 ```java
-`package` `com.java1234.chap03.sec01;` `/**`` ``* Person类 文件名和类名必须一致`` ``* @author user`` ``*`` ``*/``public` `class` `Person {` `    ``String name; ``// 在类中，定义一个姓名name字符串属性 可以存在字符串 类似"张三"``    ``int` `age; ``// 在类中，定义一个年龄age属性``    ` `    ``/**``     ``* 定义一个方法  public表示共有 权限最大  void表示返回值是空  speak是方法名 括号里可以加参数``     ``*/``    ``public` `void` `speak(){``        ``System.out.println(``"我叫"``+name+``" 我今年"``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个Person类的对象zhangsan``        ``Person zhangsan;``        ``// 实例化对象``        ``zhangsan=``new` `Person();``        ``// 给对象的name属性赋值``        ``zhangsan.name=``"张三"``;``        ``// 给对象的age属性赋值``        ``zhangsan.age=``23``;``        ``zhangsan.speak(); ``// 调用对象的方法``    ``}``}`
+package com.java1234.chap03.sec01;
+ 
+/**
+ * Person类 文件名和类名必须一致
+ * @author user
+ *
+ */
+public class Person {
+ 
+    String name; // 在类中，定义一个姓名name字符串属性 可以存在字符串 类似"张三"
+    int age; // 在类中，定义一个年龄age属性
+     
+    /**
+     * 定义一个方法  public表示共有 权限最大  void表示返回值是空  speak是方法名 括号里可以加参数
+     */
+    public void speak(){
+        System.out.println("我叫"+name+" 我今年"+age);
+    }
+     
+    public static void main(String[] args) {
+        // 定义一个Person类的对象zhangsan
+        Person zhangsan;
+        // 实例化对象
+        zhangsan=new Person();
+        // 给对象的name属性赋值
+        zhangsan.name="张三";
+        // 给对象的age属性赋值
+        zhangsan.age=23;
+        zhangsan.speak(); // 调用对象的方法
+    }
+}
 ```
 
 
 
 ### 内存分析
 
-![QQ鎴浘20160811214547.jpg](http://blog.java1234.com/static/userImages/20160811/1470923737269000637.jpg)
+![1470923737269000637.jpg](assets/1470923737269000637.jpg)
 
 ### 方法
 
@@ -101,7 +131,19 @@ Java面向对象三大特性；
 先来一个简单实例：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Person {` `    ``void` `speak(){``        ``System.out.println(``"我是张三"``);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Person person=``new` `Person();``        ``person.speak();``    ``}``}`
+package com.java1234.chap03.sec03;
+ 
+public class Person {
+ 
+    void speak(){
+        System.out.println("我是张三");
+    }
+     
+    public static void main(String[] args) {
+        Person person=new Person();
+        person.speak();
+    }
+}
 ```
 
 
@@ -115,7 +157,19 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Person {` `    ``void` `speak(String name){``        ``System.out.println(name);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Person person=``new` `Person();``        ``person.speak(``"张三"``);``    ``}``}`
+package com.java1234.chap03.sec03;
+ 
+public class Person {
+ 
+    void speak(String name){
+        System.out.println(name);
+    }
+     
+    public static void main(String[] args) {
+        Person person=new Person();
+        person.speak("张三");
+    }
+}
 ```
 
 
@@ -125,7 +179,19 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Person {` `    ``void` `speak(String name,``int` `age){``        ``System.out.println(``"我叫"``+name+``",我今年"``+age+``"岁了"``);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Person person=``new` `Person();``        ``person.speak(``"张三"``,``23``);``    ``}``}`
+package com.java1234.chap03.sec03;
+ 
+public class Person {
+ 
+    void speak(String name,int age){
+        System.out.println("我叫"+name+",我今年"+age+"岁了");
+    }
+     
+    public static void main(String[] args) {
+        Person person=new Person();
+        person.speak("张三",23);
+    }
+}
 ```
 
 
@@ -135,7 +201,23 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Person {` `    ``void` `speak(String name,``int` `age,String ...hobbies){``        ``System.out.println(``"我叫"``+name+``",我今年"``+age+``"岁了"``);``        ``for``(String hobby:hobbies){``            ``System.out.println(hobby+``" "``);``        ``}``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Person person=``new` `Person();``        ``person.speak(``"张三"``,``23``,``"游泳"``,``"唱歌"``);``    ``}``}`
+
+package com.java1234.chap03.sec03;
+ 
+public class Person {
+ 
+    void speak(String name,int age,String ...hobbies){
+        System.out.println("我叫"+name+",我今年"+age+"岁了");
+        for(String hobby:hobbies){
+            System.out.println(hobby+" ");
+        }
+    }
+     
+    public static void main(String[] args) {
+        Person person=new Person();
+        person.speak("张三",23,"游泳","唱歌");
+    }
+}
 ```
 
 
@@ -145,7 +227,27 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Person {` `    ``int` `speak(String name,``int` `age,String ...hobbies){``        ``System.out.println(``"我叫"``+name+``",我今年"``+age+``"岁了"``);``        ``for``(String hobby:hobbies){``            ``System.out.println(hobby+``" "``);``        ``}``        ``// 获取爱好的长度``        ``int` `totalHobbies=hobbies.length;``        ``return` `totalHobbies;``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Person person=``new` `Person();``        ``int` `n=person.speak(``"张三"``,``23``,``"游泳"``,``"唱歌"``);``        ``System.out.println(``"有"``+n+``"个爱好"``);``    ``}``}`
+
+package com.java1234.chap03.sec03;
+ 
+public class Person {
+ 
+    int speak(String name,int age,String ...hobbies){
+        System.out.println("我叫"+name+",我今年"+age+"岁了");
+        for(String hobby:hobbies){
+            System.out.println(hobby+" ");
+        }
+        // 获取爱好的长度
+        int totalHobbies=hobbies.length;
+        return totalHobbies;
+    }
+     
+    public static void main(String[] args) {
+        Person person=new Person();
+        int n=person.speak("张三",23,"游泳","唱歌");
+        System.out.println("有"+n+"个爱好");
+    }
+}
 ```
 
 
@@ -167,7 +269,53 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Demo01 {` `    ``int` `add(``int` `a,``int` `b){``        ``System.out.println(``"方法一"``);``        ``return` `a+b;``    ``}``    ` `    ``/**``     ``* 方法的重载，参数个数不一样``     ``* @param a``     ``* @param b``     ``* @param c``     ``* @return``     ``*/``    ``int` `add(``int` `a,``int` `b,``int` `c){``        ``System.out.println(``"方法二"``);``        ``return` `a+b+c;``    ``}``    ` `    ``/**``     ``* 方法的重载，参数的类型不一样``     ``* @param a``     ``* @param b``     ``* @return``     ``*/``    ``int` `add(``int` `a,String b){``        ``System.out.println(``"方法三"``);``        ``return` `a+Integer.parseInt(b);``    ``}``    ` `    ``/**``     ``* 参数类型个数一样，返回值类型不一样 不算重载，直接会报错，说方法重名``     ``* @param args``     ``*/``    ``/*long add(int a,int b){``        ``return a+b;``    ``}*/``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Demo01 demo=``new` `Demo01();``        ``System.out.println(demo.add(``1``, ``2``));``        ``System.out.println(demo.add(``1``, ``2``,``3``));``        ``System.out.println(demo.add(``1``, ``"3"``));``    ``}``}`
+package com.java1234.chap03.sec03;
+ 
+public class Demo01 {
+ 
+    int add(int a,int b){
+        System.out.println("方法一");
+        return a+b;
+    }
+     
+    /**
+     * 方法的重载，参数个数不一样
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
+    int add(int a,int b,int c){
+        System.out.println("方法二");
+        return a+b+c;
+    }
+     
+    /**
+     * 方法的重载，参数的类型不一样
+     * @param a
+     * @param b
+     * @return
+     */
+    int add(int a,String b){
+        System.out.println("方法三");
+        return a+Integer.parseInt(b);
+    }
+     
+    /**
+     * 参数类型个数一样，返回值类型不一样 不算重载，直接会报错，说方法重名
+     * @param args
+     */
+    /*long add(int a,int b){
+        return a+b;
+    }*/
+     
+    public static void main(String[] args) {
+        Demo01 demo=new Demo01();
+        System.out.println(demo.add(1, 2));
+        System.out.println(demo.add(1, 2,3));
+        System.out.println(demo.add(1, "3"));
+    }
+}
 ```
 
 
@@ -179,7 +327,33 @@ Java面向对象三大特性；
 具体原因：我们给下实例代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Demo01 {` `    ``int` `add(``int` `a,``int` `b){``        ``System.out.println(``"方法一"``);``        ``return` `a+b;``    ``}` `    ``/**``     ``* 参数类型个数一样，返回值类型不一样 不算重载，直接会报错，说方法重名``     ``* @param args``     ``*/``    ``long` `add(``int` `a,``int` `b){``        ``return` `a+b;``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Demo01 demo=``new` `Demo01();``        ``int` `m=demo.add(``1``, ``2``);  ``// 调用返回值是int类型的方法``        ``long` `n=demo.add(``1``, ``2``); ``// 调用返回值是long类型的方法``        ` `        ``demo.add(``1``, ``2``); ``// 假如这样些  编译器晕了，你TM是调用返回值是int类型还是long类型的方法``        ` `    ``}``}`
+
+package com.java1234.chap03.sec03;
+ 
+public class Demo01 {
+ 
+    int add(int a,int b){
+        System.out.println("方法一");
+        return a+b;
+    }
+ 
+    /**
+     * 参数类型个数一样，返回值类型不一样 不算重载，直接会报错，说方法重名
+     * @param args
+     */
+    long add(int a,int b){
+        return a+b;
+    }
+     
+    public static void main(String[] args) {
+        Demo01 demo=new Demo01();
+        int m=demo.add(1, 2);  // 调用返回值是int类型的方法
+        long n=demo.add(1, 2); // 调用返回值是long类型的方法
+         
+        demo.add(1, 2); // 假如这样些  编译器晕了，你TM是调用返回值是int类型还是long类型的方法
+         
+    }
+}
 ```
 
 
@@ -215,7 +389,28 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Demo02 {` `    ``void` `fun1(){``        ``System.out.println(``"这是一个普通方法"``);``    ``}``    ` `    ``static` `void` `fun2(){``        ``System.out.println(``"这是一个静态方法"``);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Demo02 demo=``new` `Demo02();``        ``// 调用普通方法  对象.方法``        ``demo.fun1();``        ` `        ``// 调用静态方法 类名.方法``        ``Demo02.fun2();``        ``demo.fun2();``    ``}``}`
+package com.java1234.chap03.sec03;
+ 
+public class Demo02 {
+ 
+    void fun1(){
+        System.out.println("这是一个普通方法");
+    }
+     
+    static void fun2(){
+        System.out.println("这是一个静态方法");
+    }
+     
+    public static void main(String[] args) {
+        Demo02 demo=new Demo02();
+        // 调用普通方法  对象.方法
+        demo.fun1();
+         
+        // 调用静态方法 类名.方法
+        Demo02.fun2();
+        demo.fun2();
+    }
+}
 ```
 
 
@@ -245,7 +440,30 @@ Java面向对象三大特性；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Demo03 {` `    ``/**``     ``* 非递归``     ``* @param n``     ``* @return``     ``*/``    ``static` `long` `notDiGui(``int` `n){``        ``long` `result=``1``;``        ``for``(``int` `i=``1``;i<=n;i++){``            ``result=result*i;``        ``}``        ``return` `result;``    ``}``    ` `    ` `    ` `    ``public` `static` `void` `main(String[] args) {``        ``System.out.println(Demo03.notDiGui(``5``));``    ``}``}`
+
+package com.java1234.chap03.sec03;
+ 
+public class Demo03 {
+ 
+    /**
+     * 非递归
+     * @param n
+     * @return
+     */
+    static long notDiGui(int n){
+        long result=1;
+        for(int i=1;i<=n;i++){
+            result=result*i;
+        }
+        return result;
+    }
+     
+     
+     
+    public static void main(String[] args) {
+        System.out.println(Demo03.notDiGui(5));
+    }
+}
 ```
 
 
@@ -277,7 +495,28 @@ n=1   1
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec03;` `public` `class` `Demo03 {` `    ``/**``     ``* 递归方式``     ``* @param n``     ``* @return``     ``*/``    ``static` `long` `diGui(``int` `n){``        ``if``(n==``1``){``            ``return` `1``;``        ``}``        ``return` `diGui(n-``1``)*n;``    ``}``    ` `    ` `    ``public` `static` `void` `main(String[] args) {``        ``System.out.println(Demo03.diGui(``5``));``    ``}``}`
+
+package com.java1234.chap03.sec03;
+ 
+public class Demo03 {
+ 
+    /**
+     * 递归方式
+     * @param n
+     * @return
+     */
+    static long diGui(int n){
+        if(n==1){
+            return 1;
+        }
+        return diGui(n-1)*n;
+    }
+     
+     
+    public static void main(String[] args) {
+        System.out.println(Demo03.diGui(5));
+    }
+}
 ```
 
 
@@ -291,7 +530,38 @@ n=1   1
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec04;` `/**`` ``* 定义人类`` ``* @author user`` ``*`` ``*/``public` `class` `People {` `    ``// 定义属性 ``    ``private` `String name; ``// 实例化对象时，默认值是null``    ``private` `int` `age; ``// 实例化对象时，默认值是0``    ` `    ``/**``     ``* 默认构造方法``     ``*/``    ``People(){``        ``System.out.println(``"默认构造方法！"``);``    ``}``    `  `    ` `    ``public` `void` `say(){``        ``System.out.println(``"我叫："``+name+``"，我今年："``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``People people=``new` `People();``        ``people.say();``    ``}``}`
+
+package com.java1234.chap03.sec04;
+ 
+/**
+ * 定义人类
+ * @author user
+ *
+ */
+public class People {
+ 
+    // 定义属性 
+    private String name; // 实例化对象时，默认值是null
+    private int age; // 实例化对象时，默认值是0
+     
+    /**
+     * 默认构造方法
+     */
+    People(){
+        System.out.println("默认构造方法！");
+    }
+     
+ 
+     
+    public void say(){
+        System.out.println("我叫："+name+"，我今年："+age);
+    }
+     
+    public static void main(String[] args) {
+        People people=new People();
+        people.say();
+    }
+}
 ```
 
 
@@ -299,7 +569,9 @@ n=1   1
 运行输出：
 
 ```
-`默认构造方法！``我叫：null，我今年：0`
+
+默认构造方法！
+我叫：null，我今年：0
 ```
 
 
@@ -319,7 +591,48 @@ People(){} 构造方法
 我们现在可以写一个有参数的构造方法，用来初始化对象属性；
 
 ```java
-`package` `com.java1234.chap03.sec04;` `/**`` ``* 定义人类`` ``* @author user`` ``*`` ``*/``public` `class` `People {` `    ``// 定义属性 ``    ``private` `String name; ``// 实例化对象时，默认值是null``    ``private` `int` `age; ``// 实例化对象时，默认值是0``    ` `    ``/**``     ``* 默认构造方法``     ``*/``    ``People(){``        ``System.out.println(``"默认构造方法！"``);``    ``}``    ` `    ``/**``     ``* 有参数的构造方法``     ``* @param name2``     ``* @param age2``     ``*/``    ``People(String name2,``int` `age2){``        ``System.out.println(``"调用的是有参数的构造方法"``);``        ``name=name2;``        ``age=age2;``    ``}``    ` `    ``public` `void` `say(){``        ``System.out.println(``"我叫："``+name+``"，我今年："``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``// People people=new People();``        ``People people=``new` `People(``"张三"``,``20``);``        ``people.say();``    ``}``}`
+
+package com.java1234.chap03.sec04;
+ 
+/**
+ * 定义人类
+ * @author user
+ *
+ */
+public class People {
+ 
+    // 定义属性 
+    private String name; // 实例化对象时，默认值是null
+    private int age; // 实例化对象时，默认值是0
+     
+    /**
+     * 默认构造方法
+     */
+    People(){
+        System.out.println("默认构造方法！");
+    }
+     
+    /**
+     * 有参数的构造方法
+     * @param name2
+     * @param age2
+     */
+    People(String name2,int age2){
+        System.out.println("调用的是有参数的构造方法");
+        name=name2;
+        age=age2;
+    }
+     
+    public void say(){
+        System.out.println("我叫："+name+"，我今年："+age);
+    }
+     
+    public static void main(String[] args) {
+        // People people=new People();
+        People people=new People("张三",20);
+        people.say();
+    }
+}
 ```
 
 
@@ -327,7 +640,8 @@ People(){} 构造方法
 运行输出：
 
 ```
-`调用的是有参数的构造方法``我叫：张三，我今年：20`
+调用的是有参数的构造方法
+我叫：张三，我今年：20
 ```
 
 
@@ -347,7 +661,48 @@ People(){} 构造方法
 上代码，我们去掉刚才定义的People(){} 
 
 ```java
-`package` `com.java1234.chap03.sec04;` `/**`` ``* 定义人类`` ``* @author user`` ``*`` ``*/``public` `class` `People {` `    ``// 定义属性 ``    ``private` `String name; ``// 实例化对象时，默认值是null``    ``private` `int` `age; ``// 实例化对象时，默认值是0``    ` `    ``/**``     ``* 默认构造方法``     ``*/``    ``/*People(){``        ``System.out.println("默认构造方法！");``    ``}*/``    ` `    ``/**``     ``* 有参数的构造方法``     ``* @param name2``     ``* @param age2``     ``*/``    ``/*People(String name2,int age2){``        ``System.out.println("调用的是有参数的构造方法");``        ``name=name2;``        ``age=age2;``    ``}*/``    ` `    ``public` `void` `say(){``        ``System.out.println(``"我叫："``+name+``"，我今年："``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``People people=``new` `People();``        ``//People people=new People("张三",20);``        ``people.say();``    ``}``}`
+
+package com.java1234.chap03.sec04;
+ 
+/**
+ * 定义人类
+ * @author user
+ *
+ */
+public class People {
+ 
+    // 定义属性 
+    private String name; // 实例化对象时，默认值是null
+    private int age; // 实例化对象时，默认值是0
+     
+    /**
+     * 默认构造方法
+     */
+    /*People(){
+        System.out.println("默认构造方法！");
+    }*/
+     
+    /**
+     * 有参数的构造方法
+     * @param name2
+     * @param age2
+     */
+    /*People(String name2,int age2){
+        System.out.println("调用的是有参数的构造方法");
+        name=name2;
+        age=age2;
+    }*/
+     
+    public void say(){
+        System.out.println("我叫："+name+"，我今年："+age);
+    }
+     
+    public static void main(String[] args) {
+        People people=new People();
+        //People people=new People("张三",20);
+        people.say();
+    }
+}
 ```
 
 
@@ -363,14 +718,49 @@ People(){} 构造方法
 假如我们单独去掉无参数的构造方法，上代码：
 
 ```java
-`package` `com.java1234.chap03.sec04;` `/**`` ``* 定义人类`` ``* @author user`` ``*`` ``*/``public` `class` `People {` `    ``// 定义属性 ``    ``private` `String name; ``// 实例化对象时，默认值是null``    ``private` `int` `age; ``// 实例化对象时，默认值是0``    ` `    ` `    ``/**``     ``* 有参数的构造方法``     ``* @param name2``     ``* @param age2``     ``*/``    ``People(String name2,``int` `age2){``        ``System.out.println(``"调用的是有参数的构造方法"``);``        ``name=name2;``        ``age=age2;``    ``}``    ` `    ``public` `void` `say(){``        ``System.out.println(``"我叫："``+name+``"，我今年："``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``People people=``new` `People();``        ``//People people=new People("张三",20);``        ``people.say();``    ``}``}`
+
+package com.java1234.chap03.sec04;
+ 
+/**
+ * 定义人类
+ * @author user
+ *
+ */
+public class People {
+ 
+    // 定义属性 
+    private String name; // 实例化对象时，默认值是null
+    private int age; // 实例化对象时，默认值是0
+     
+     
+    /**
+     * 有参数的构造方法
+     * @param name2
+     * @param age2
+     */
+    People(String name2,int age2){
+        System.out.println("调用的是有参数的构造方法");
+        name=name2;
+        age=age2;
+    }
+     
+    public void say(){
+        System.out.println("我叫："+name+"，我今年："+age);
+    }
+     
+    public static void main(String[] args) {
+        People people=new People();
+        //People people=new People("张三",20);
+        people.say();
+    }
+}
 ```
 
 
 
 我们会发现编译报错了：
 
-![QQ鎴浘20160904194106.jpg](http://blog.java1234.com/static/userImages/20160904/1472989323739049974.jpg)
+![1472989323739049974.jpg](assets/1472989323739049974.jpg)
 
 The constructor People() is undefined
 
@@ -393,16 +783,20 @@ this表示当前对象
 我们上面的例子
 
 ```java
-`People(String name2,``int` `age2){``    ``System.out.println(``"调用的是有参数的构造方法"``);``    ``name=name2;``    ``age=age2;``}`
+People(String name2,int age2){
+    System.out.println("调用的是有参数的构造方法");
+    name=name2;
+    age=age2;
+}
 ```
 
 
 
 构造方法的属性名和类里的属性名不一致； 假如说我们搞成一致；
 
-![QQ鍥剧墖20160904195652.png](http://blog.java1234.com/static/userImages/20160904/1472990233161061978.png)
 
 
+![1472990233161061978.png](assets/1472990233161061978.png)
 
 这里警告的意思 是自己赋值给自己 没有意义，这里的name和age变量 作用范围在方法里 所以和类里的属性名搭不上边；
 
@@ -417,7 +811,47 @@ this表示当前对象
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec04;` `/**`` ``* 定义人类`` ``* @author user`` ``*`` ``*/``public` `class` `People {` `    ``// 定义属性 ``    ``private` `String name; ``// 实例化对象时，默认值是null``    ``private` `int` `age; ``// 实例化对象时，默认值是0``    ` `    ``/**``     ``* 默认构造方法``     ``*/``    ``/*People(){``        ``System.out.println("默认构造方法！");``    ``}*/``    ` `    ``/**``     ``* 有参数的构造方法``     ``* @param name``     ``* @param age``     ``*/``    ``People(String name,``int` `age){``        ``System.out.println(``"调用的是有参数的构造方法"``);``        ``this``.name=name;``        ``this``.age=age;``    ``}``    ` `    ``public` `void` `say(){``        ``System.out.println(``"我叫："``+name+``"，我今年："``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``// People people=new People();``        ``People people=``new` `People(``"张三"``,``20``);``        ``people.say();``    ``}``}`
+package com.java1234.chap03.sec04;
+ 
+/**
+ * 定义人类
+ * @author user
+ *
+ */
+public class People {
+ 
+    // 定义属性 
+    private String name; // 实例化对象时，默认值是null
+    private int age; // 实例化对象时，默认值是0
+     
+    /**
+     * 默认构造方法
+     */
+    /*People(){
+        System.out.println("默认构造方法！");
+    }*/
+     
+    /**
+     * 有参数的构造方法
+     * @param name
+     * @param age
+     */
+    People(String name,int age){
+        System.out.println("调用的是有参数的构造方法");
+        this.name=name;
+        this.age=age;
+    }
+     
+    public void say(){
+        System.out.println("我叫："+name+"，我今年："+age);
+    }
+     
+    public static void main(String[] args) {
+        // People people=new People();
+        People people=new People("张三",20);
+        people.say();
+    }
+}
 ```
 
 
@@ -429,7 +863,49 @@ this表示当前对象
 我们调用this()就是调用无参数构造方法，括号里也可以加参数，来调用有参数的构造方法，上代码：
 
 ```java
-`package` `com.java1234.chap03.sec04;` `/**`` ``* 定义人类`` ``* @author user`` ``*`` ``*/``public` `class` `People {` `    ``// 定义属性 ``    ``private` `String name; ``// 实例化对象时，默认值是null``    ``private` `int` `age; ``// 实例化对象时，默认值是0``    ` `    ``/**``     ``* 默认构造方法``     ``*/``    ``People(){``        ``System.out.println(``"默认构造方法！"``);``    ``}``    ` `    ``/**``     ``* 有参数的构造方法``     ``* @param name``     ``* @param age``     ``*/``    ``People(String name,``int` `age){``        ``this``(); ``// 调用无参数的构造方法``        ``System.out.println(``"调用的是有参数的构造方法"``);``        ``this``.name=name;``        ``this``.age=age;``    ``}``    ` `    ``public` `void` `say(){``        ``System.out.println(``"我叫："``+name+``"，我今年："``+age);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``// People people=new People();``        ``People people=``new` `People(``"张三"``,``20``);``        ``people.say();``    ``}``}`
+
+package com.java1234.chap03.sec04;
+ 
+/**
+ * 定义人类
+ * @author user
+ *
+ */
+public class People {
+ 
+    // 定义属性 
+    private String name; // 实例化对象时，默认值是null
+    private int age; // 实例化对象时，默认值是0
+     
+    /**
+     * 默认构造方法
+     */
+    People(){
+        System.out.println("默认构造方法！");
+    }
+     
+    /**
+     * 有参数的构造方法
+     * @param name
+     * @param age
+     */
+    People(String name,int age){
+        this(); // 调用无参数的构造方法
+        System.out.println("调用的是有参数的构造方法");
+        this.name=name;
+        this.age=age;
+    }
+     
+    public void say(){
+        System.out.println("我叫："+name+"，我今年："+age);
+    }
+     
+    public static void main(String[] args) {
+        // People people=new People();
+        People people=new People("张三",20);
+        people.say();
+    }
+}
 ```
 
 
@@ -437,7 +913,10 @@ this表示当前对象
 运行输出：
 
 ```
-`默认构造方法！``调用的是有参数的构造方法``我叫：张三，我今年：20`
+
+默认构造方法！
+调用的是有参数的构造方法
+我叫：张三，我今年：20
 ```
 
 
@@ -454,7 +933,7 @@ Java中，可以通过一些Java关键字，来设置访问控制权限；
 
 
 
-![QQ鎴浘20160909205259.jpg](http://blog.java1234.com/static/userImages/20160909/1473425798358093755.jpg)
+![1473425798358093755.jpg](assets/1473425798358093755.jpg)
 
 
 
@@ -477,7 +956,25 @@ Java中，可以通过一些Java关键字，来设置访问控制权限；
 上代码：
 
 ```java
-`package` `com.java1234.chap03.sec05;` `public` `class` `Demo1 {` `    ``/**``     ``* 定义一个私有的属性a``     ``*/``    ``private` `int` `a;` `    ``public` `int` `getA() {``        ``return` `a;``    ``}` `    ``public` `void` `setA(``int` `a) {``        ``this``.a = a;``    ``}``    ` `    ` `}`
+package com.java1234.chap03.sec05;
+ 
+public class Demo1 {
+ 
+    /**
+     * 定义一个私有的属性a
+     */
+    private int a;
+ 
+    public int getA() {
+        return a;
+    }
+ 
+    public void setA(int a) {
+        this.a = a;
+    }
+     
+     
+}
 ```
 
 
@@ -485,7 +982,17 @@ Java中，可以通过一些Java关键字，来设置访问控制权限；
 我们写个测试类：
 
 ```java
-`package` `com.java1234.chap03.sec05;` `public` `class` `TestDemo1 {` `    ``public` `static` `void` `main(String[] args) {``        ``Demo1 demo1=``new` `Demo1();``        ``demo1.setA(``2``);``        ``int` `a=demo1.getA();``        ``System.out.println(a);``    ``}``}`
+package com.java1234.chap03.sec05;
+ 
+public class TestDemo1 {
+ 
+    public static void main(String[] args) {
+        Demo1 demo1=new Demo1();
+        demo1.setA(2);
+        int a=demo1.getA();
+        System.out.println(a);
+    }
+}
 ```
 
 
@@ -519,7 +1026,39 @@ Java中，可以通过一些Java关键字，来设置访问控制权限；
 我们先来看一个示例：
 
 ```java
-`package` `com.java1234.chap03.sec06;` `/**`` ``* 外部类`` ``* @author user`` ``*`` ``*/``public` `class` `Outer {` `    ``private` `int` `a=``1``;``    ` `    ``/**``     ``* 内部类``     ``* @author user``     ``*``     ``*/``    ``class` `Inner{``        ``public` `void` `show(){``            ``System.out.println(a); ``// 可以方便的额使用外部类的属性；``        ``}``    ``}``    ` `    ``public` `void` `show(){``        ``Inner inner=``new` `Inner();``        ``inner.show();``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``Outer outer=``new` `Outer();``        ``outer.show();``    ``}``}`
+
+package com.java1234.chap03.sec06;
+ 
+/**
+ * 外部类
+ * @author user
+ *
+ */
+public class Outer {
+ 
+    private int a=1;
+     
+    /**
+     * 内部类
+     * @author user
+     *
+     */
+    class Inner{
+        public void show(){
+            System.out.println(a); // 可以方便的额使用外部类的属性；
+        }
+    }
+     
+    public void show(){
+        Inner inner=new Inner();
+        inner.show();
+    }
+     
+    public static void main(String[] args) {
+        Outer outer=new Outer();
+        outer.show();
+    }
+}
 ```
 
 
@@ -539,7 +1078,16 @@ Java中，可以通过一些Java关键字，来设置访问控制权限；
 写一个main方法 我们现在不使用Outer里的show()方法 我们要直接调用Inner里的show()方法，
 
 ```java
-`package` `com.java1234.chap03.sec06;` `public` `class` `TestInner {` `    ``public` `static` `void` `main(String[] args) {``        ``Outer outer=``new` `Outer();``        ``Outer.Inner inner=outer.``new` `Inner();``        ``inner.show();``    ``}``}`
+package com.java1234.chap03.sec06;
+ 
+public class TestInner {
+ 
+    public static void main(String[] args) {
+        Outer outer=new Outer();
+        Outer.Inner inner=outer.new Inner();
+        inner.show();
+    }
+}
 ```
 
 
@@ -564,8 +1112,24 @@ Java中，可以通过一些Java关键字，来设置访问控制权限；
 
 仅仅是花括号括起来的代码块，个人感觉作用不大，我们来看一个实例：
 
-```
-`package` `com.java1234.chap03.sec07;` `public` `class` `Demo1 {` `    ``public` `static` `void` `main(String[] args) {``        ``int` `a=``1``;``        ``/**``         ``* 普通代码块``         ``*/``        ``{``            ``a=``2``;``            ``System.out.println(``"普通代码块"``);``        ``}``        ``System.out.println(``"a="``+a);``    ``}``}`
+```java
+
+package com.java1234.chap03.sec07;
+ 
+public class Demo1 {
+ 
+    public static void main(String[] args) {
+        int a=1;
+        /**
+         * 普通代码块
+         */
+        {
+            a=2;
+            System.out.println("普通代码块");
+        }
+        System.out.println("a="+a);
+    }
+}
 ```
 
 
@@ -584,8 +1148,46 @@ a=2
 
 我们来看一个实例：
 
-```
-`package` `com.java1234.chap03.sec07;` `public` `class` `Demo2 {` `    ``/**``     ``* 构造块``     ``*/``    ``{``        ``System.out.println(``"通用构造块！"``);``    ``}``    ` `    ``/**``     ``* 构造方法一``     ``*/``    ``public` `Demo2(){``        ``System.out.println(``"构造方法一"``);``    ``}``    ` `    ``/**``     ``* 构造方法二``     ``*/``    ``public` `Demo2(``int` `i){``        ``System.out.println(``"构造方法二"``);``    ``}``    ` `    ``/**``     ``* 构造方法三``     ``*/``    ``public` `Demo2(``int` `i,``int` `j){``        ``System.out.println(``"构造方法三"``);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``new` `Demo2();``        ``new` `Demo2(``1``);``        ``new` `Demo2(``1``,``2``);``    ``}``}`
+```java
+
+package com.java1234.chap03.sec07;
+ 
+public class Demo2 {
+ 
+    /**
+     * 构造块
+     */
+    {
+        System.out.println("通用构造块！");
+    }
+     
+    /**
+     * 构造方法一
+     */
+    public Demo2(){
+        System.out.println("构造方法一");
+    }
+     
+    /**
+     * 构造方法二
+     */
+    public Demo2(int i){
+        System.out.println("构造方法二");
+    }
+     
+    /**
+     * 构造方法三
+     */
+    public Demo2(int i,int j){
+        System.out.println("构造方法三");
+    }
+     
+    public static void main(String[] args) {
+        new Demo2();
+        new Demo2(1);
+        new Demo2(1,2);
+    }
+}
 ```
 
 
@@ -618,8 +1220,52 @@ a=2
 
 我们看一个实例：
 
-```
-`package` `com.java1234.chap03.sec07;` `public` `class` `Demo3 {` `    ``/**``     ``* 静态代码块 类加载的时候执行``     ``*/``    ``static``{``        ``System.out.println(``"静态代码块！"``);  ``    ``}``    ` `    ``/**``     ``* 构造块``     ``*/``    ``{``        ``System.out.println(``"通用构造块！"``);``    ``}``    ` `    ``/**``     ``* 构造方法一``     ``*/``    ``public` `Demo3(){``        ``System.out.println(``"构造方法一"``);``    ``}``    ` `    ``/**``     ``* 构造方法二``     ``*/``    ``public` `Demo3(``int` `i){``        ``System.out.println(``"构造方法二"``);``    ``}``    ` `    ``/**``     ``* 构造方法三``     ``*/``    ``public` `Demo3(``int` `i,``int` `j){``        ``System.out.println(``"构造方法三"``);``    ``}``    ` `    ``public` `static` `void` `main(String[] args) {``        ``new` `Demo3();``        ``new` `Demo3(``1``);``        ``new` `Demo3(``1``,``2``);``    ``}``}`
+```java
+package com.java1234.chap03.sec07;
+ 
+public class Demo3 {
+ 
+    /**
+     * 静态代码块 类加载的时候执行
+     */
+    static{
+        System.out.println("静态代码块！");  
+    }
+     
+    /**
+     * 构造块
+     */
+    {
+        System.out.println("通用构造块！");
+    }
+     
+    /**
+     * 构造方法一
+     */
+    public Demo3(){
+        System.out.println("构造方法一");
+    }
+     
+    /**
+     * 构造方法二
+     */
+    public Demo3(int i){
+        System.out.println("构造方法二");
+    }
+     
+    /**
+     * 构造方法三
+     */
+    public Demo3(int i,int j){
+        System.out.println("构造方法三");
+    }
+     
+    public static void main(String[] args) {
+        new Demo3();
+        new Demo3(1);
+        new Demo3(1,2);
+    }
+}
 ```
 
 
