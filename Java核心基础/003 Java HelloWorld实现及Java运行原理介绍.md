@@ -9,7 +9,11 @@
 上代码：
 
 ```java
-`public` `class` `HelloWorld{``    ``public` `static` `void` `main(String args[]){``        ``System.out.println(``"Java大爷，你好！"``);``    ``}``}`
+public class HelloWorld{
+    public static void main(String args[]){
+        System.out.println("Java大爷，你好！");
+    }
+}
 ```
 
 这里我们对上述HelloWorld简单讲解下：
@@ -30,37 +34,35 @@ main是方法名，特殊方法，表示执行入口，括号里的String args[]
 
 进入命令行，D: 进行D盘目录
 
-
-
-![QQ鎴浘20160525152103.jpg](http://blog.java1234.com/static/userImages/20160525/1464160873875064227.jpg)
+![1464160873875064227.jpg](assets/1464160873875064227.jpg)
 
 
 
 然后我们用javac命令编译源文件：
 
-![QQ鎴浘20160525154554.jpg](http://blog.java1234.com/static/userImages/20160525/1464162408453084125.jpg)
 
 
+![1464162408453084125.jpg](assets/1464162408453084125.jpg)
 
 执行完 在D盘下会多一个HelloWorld.class文件 也就是java可运行文件；
 
-![QQ鎴浘20160525154603.jpg](http://blog.java1234.com/static/userImages/20160525/1464162438718041797.jpg)
 
 
+![1464162438718041797.jpg](assets/1464162438718041797.jpg)
 
 ## 运行
 
 我们运行java命令运行HelloWorld.class文件；
 
-![QQ鎴浘20160525154741.jpg](http://blog.java1234.com/static/userImages/20160525/1464162474109090376.jpg)
+![1464162474109090376.jpg](assets/1464162474109090376.jpg)
 
 ## 原理
 
 下面我们再说下java程序基本运行原理：
 
+![1464162896656027696.jpg](assets/1464162896656027696.jpg)
 
 
-![QQ鎴浘20160525151539.jpg](http://blog.java1234.com/static/userImages/20160525/1464162896656027696.jpg)
 
 
 
