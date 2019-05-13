@@ -1,6 +1,6 @@
-![QQ鎴浘20160604185320.jpg](http://blog.java1234.com/static/userImages/20160604/1465038266296018882.jpg)
 
 
+![1465038266296018882.jpg](assets/1465038266296018882.jpg)
 
 Java数据类型可以分为 基本数据类型和引用数据类型。
 
@@ -10,15 +10,13 @@ Java数据类型可以分为 基本数据类型和引用数据类型。
 
 ## 整数类型
 
-![QQ鎴浘20160604190759.jpg](http://blog.java1234.com/static/userImages/20160604/1465038563031058338.jpg)
+![1465038563031058338.jpg](assets/1465038563031058338.jpg)
 
 
 
 在java中，根据位数，数据范围，可以分为byte,short,int,long类型；
 
-
-
-![QQ鎴浘20160604191055.jpg](http://blog.java1234.com/static/userImages/20160604/1465038659468057978.jpg)
+![1465038659468057978.jpg](assets/1465038659468057978.jpg)
 
 ```java
 
@@ -75,12 +73,31 @@ public class Test {
 
 ## 浮点类型
 
-![QQ鎴浘20160604191739.jpg](http://blog.java1234.com/static/userImages/20160604/1465039111796066613.jpg)
+![1465039111796066613.jpg](assets/1465039111796066613.jpg)
 
 在Java中 根据位数和数据范围，浮点类型有float,double类型；
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo02 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个float类型变量f``        ``// 小数默认是double类型，所以我们必须加一个f，来表示float类型``        ``float` `f=``0``.1f;``        ``System.out.println(``"f="``+f);``        ` `        ``// 定义一个double类型变量d``        ``double` `d=``1.2``;``        ``// 快捷方式 syso alt+/``        ``System.out.println(``"d="``+d);``        ` `        ``float` `maxF=Float.MAX_VALUE;``        ``System.out.println(``"float的最大值："``+maxF);``    ``}``}`
+
+package com.java1234.chap02;
+ 
+public class Demo02 {
+ 
+    public static void main(String[] args) {
+        // 定义一个float类型变量f
+        // 小数默认是double类型，所以我们必须加一个f，来表示float类型
+        float f=0.1f;
+        System.out.println("f="+f);
+         
+        // 定义一个double类型变量d
+        double d=1.2;
+        // 快捷方式 syso alt+/
+        System.out.println("d="+d);
+         
+        float maxF=Float.MAX_VALUE;
+        System.out.println("float的最大值："+maxF);
+    }
+}
 ```
 
 ## 布尔类型
@@ -88,7 +105,22 @@ public class Test {
 布尔类型只有true和false两个值； 用关键字boolean定义。
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo04 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个布尔类型的变量b``        ``boolean` `b1=``true``;``        ``System.out.println(``"b1="``+b1);``        ` `        ``// 定义一个布尔类型的变量b2``        ``boolean` `b2=``false``;``        ``System.out.println(``"b2="``+b2);``    ``}``}`
+
+package com.java1234.chap02;
+ 
+public class Demo04 {
+ 
+    public static void main(String[] args) {
+        // 定义一个布尔类型的变量b
+        boolean b1=true;
+        System.out.println("b1="+b1);
+         
+        // 定义一个布尔类型的变量b2
+        boolean b2=false;
+        System.out.println("b2="+b2);
+    }
+}
+
 ```
 
 ## 字符类型
@@ -109,9 +141,9 @@ public class Test {
 
 关于转义，有些字符属于特殊字符，不能直接使用，所以需要转义；
 
-![QQ鎴浘20160609111946.jpg](http://blog.java1234.com/static/userImages/20160609/1465442403834060641.jpg)
 
 
+![1465442403834060641.jpg](assets/1465442403834060641.jpg)
 
 关于Unicode，全世界有这么多语言文字，我们可以用Unicode表示出来，我们主要要学会用Unicode来表示中文；
 
@@ -129,7 +161,31 @@ public class Test {
 我们给出一些实例：
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo03 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个单个字符``        ``char` `c1=``'A'``;``        ``char` `c2=``'b'``;``        ``char` `c3=``'4'``;``        ``System.out.println(``"c1="``+c1);``        ``System.out.println(``"c2="``+c2);``        ``System.out.println(``"c3="``+c3);``        ` `        ``// 转义字符``        ``char` `c4=``'\\'``;``        ``System.out.println(``"c4="``+c4);``        ` `        ``// 用Unicode编码输出自己的名字``        ``char` `c5=``'\u66f9'``;``        ``char` `c6=``'\u950b'``;``        ``System.out.println(``"c5="``+c5);``        ``System.out.println(``"c6="``+c6);``    ``}``}`
+
+package com.java1234.chap02;
+ 
+public class Demo03 {
+ 
+    public static void main(String[] args) {
+        // 定义一个单个字符
+        char c1='A';
+        char c2='b';
+        char c3='4';
+        System.out.println("c1="+c1);
+        System.out.println("c2="+c2);
+        System.out.println("c3="+c3);
+         
+        // 转义字符
+        char c4='\\';
+        System.out.println("c4="+c4);
+         
+        // 用Unicode编码输出自己的名字
+        char c5='\u66f9';
+        char c6='\u950b';
+        System.out.println("c5="+c5);
+        System.out.println("c6="+c6);
+    }
+}
 ```
 
 
@@ -137,7 +193,13 @@ public class Test {
 输出结果：
 
 ```
-`c1=A``c2=b``c3=4``c4=\``c5=曹``c6=锋`
+
+c1=A
+c2=b
+c3=4
+c4=\
+c5=曹
+c6=锋
 ```
 
 
