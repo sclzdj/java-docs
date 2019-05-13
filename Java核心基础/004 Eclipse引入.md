@@ -26,7 +26,7 @@
 
 
 
-![QQ鎴浘20160528183528.png](http://blog.java1234.com/static/userImages/20160528/1464431882640090801.png)
+![1464431882640090801.png](assets/1464431882640090801.png)
 
 
 
@@ -38,7 +38,7 @@
 
 
 
-![QQ鎴浘20160528183540.png](http://blog.java1234.com/static/userImages/20160528/1464431897468002523.png)
+![1464431897468002523.png](assets/1464431897468002523.png)
 
 ## 使用
 
@@ -46,7 +46,7 @@
 
 
 
-![3.jpg](http://blog.java1234.com/static/userImages/20160528/1464427846468044819.jpg)
+![1464427846468044819.jpg](assets/1464427846468044819.jpg)
 
 
 
@@ -58,15 +58,13 @@
 
 菜单File -> New-> Java Project 
 
-![4.jpg](http://blog.java1234.com/static/userImages/20160528/1464428149203098649.jpg)
 
 
+![1464428149203098649.jpg](assets/1464428149203098649.jpg)
 
 Project Name 我们输入 Pro01即可，然后点击Finish按钮，既可完成项目的创建；
 
-
-
-![5.jpg](http://blog.java1234.com/static/userImages/20160528/1464428233656019800.jpg)
+![1464428233656019800.jpg](assets/1464428233656019800.jpg)
 
 ## 创建Class
 
@@ -74,7 +72,7 @@ Project Name 我们输入 Pro01即可，然后点击Finish按钮，既可完成�
 
 
 
-![6.jpg](http://blog.java1234.com/static/userImages/20160528/1464428496000097830.jpg)
+![1464428496000097830.jpg](assets/1464428496000097830.jpg)
 
 
 
@@ -82,19 +80,19 @@ Project Name 我们输入 Pro01即可，然后点击Finish按钮，既可完成�
 
 
 
-![7.jpg](http://blog.java1234.com/static/userImages/20160528/1464428546484008712.jpg)
+![1464428546484008712.jpg](assets/1464428546484008712.jpg)
 
 ## 编写代码
 
 然后我们编写代码：
 
-![8.jpg](http://blog.java1234.com/static/userImages/20160528/1464430894625087704.jpg)
+![1464430894625087704.jpg](assets/1464430894625087704.jpg)
 
 ## 运行
 
 最后我们 右击HelloWorld类 Run As -> Java Application 运行即可
 
-![9.jpg](http://blog.java1234.com/static/userImages/20160528/1464430948531025828.jpg)
+![1464430948531025828.jpg](assets/1464430948531025828.jpg)
 
 
 
