@@ -15,7 +15,17 @@ type []arrayName; 或者 type arrayName[];
 实例代码：
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo18 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个数组``        ``int` `[]arr;``        ``// 定义一个数组``        ``int` `arr2[];``    ``}``}`
+package com.java1234.chap02;
+ 
+public class Demo18 {
+ 
+    public static void main(String[] args) {
+        // 定义一个数组
+        int []arr;
+        // 定义一个数组
+        int arr2[];
+    }
+}
 ```
 
 
@@ -35,7 +45,26 @@ type []arrayName; 或者 type arrayName[];
 实例代码：
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo18 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个数组，并且静态初始化``        ``int` `arr[]=``new` `int``[]{``1``,``2``,``3``};``        ` `        ``// 普通的遍历数组方式``        ``for``(``int` `i=``0``;i<arr.length;i++){``            ``System.out.println(arr[i]);``        ``}``        ` `        ``System.out.println(``"---------------"``);``        ``// foreach方式``        ``for``(``int` `j:arr){``            ``System.out.println(j);``        ``}``    ``}``}`
+package com.java1234.chap02;
+ 
+public class Demo18 {
+ 
+    public static void main(String[] args) {
+        // 定义一个数组，并且静态初始化
+        int arr[]=new int[]{1,2,3};
+         
+        // 普通的遍历数组方式
+        for(int i=0;i<arr.length;i++){
+            System.out.println(arr[i]);
+        }
+         
+        System.out.println("---------------");
+        // foreach方式
+        for(int j:arr){
+            System.out.println(j);
+        }
+    }
+}
 ```
 
 
@@ -55,7 +84,20 @@ type []arrayName; 或者 type arrayName[];
 实例代码：
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo18 {` `    ``public` `static` `void` `main(String[] args) {``        ``// 定义一个数组，然后动态初始化，长度是3``        ``int` `arr[]=``new` `int``[``3``];``        ``// int类型的数组，默认是0``        ``for``(``int` `i=``0``;i<arr.length;i++){``            ``System.out.println(arr[i]);``        ``}``    ``}``}`
+
+package com.java1234.chap02;
+ 
+public class Demo18 {
+ 
+    public static void main(String[] args) {
+        // 定义一个数组，然后动态初始化，长度是3
+        int arr[]=new int[3];
+        // int类型的数组，默认是0
+        for(int i=0;i<arr.length;i++){
+            System.out.println(arr[i]);
+        }
+    }
+}
 ```
 
 
@@ -72,7 +114,7 @@ type []arrayName; 或者 type arrayName[];
 
 ### 一维数组内存分析
 
-**![QQ鎴浘20160725150712.jpg](http://blog.java1234.com/static/userImages/20160725/1469430717468024387.jpg)**
+![1469430717468024387.jpg](assets/1469430717468024387.jpg)
 
 主要分为 栈区和堆区  栈区主要存放引用地址  堆区主要存放大块的实际数据，比如对象，数组；
 
@@ -99,7 +141,22 @@ arrayName=new type[length][length];
 静态初始化实例：
 
 ```java
-`package` `com.java1234.chap02;` `public` `class` `Demo19 {` `    ``public` `static` `void` `main(String[] args) {``        ``int` `[][]arr=``new` `int``[][]{{``1``,``2``,``3``},{``4``,``5``,``6``},{``7``,``8``,``9``}};``        ` `        ``for``(``int` `i=``0``;i<arr.length;i++){``            ``for``(``int` `j=``0``;j<arr[i].length;j++){``                ``System.out.print(arr[i][j]+``" "``);``            ``}``            ``System.out.println();``        ``}``    ``}``}`
+
+package com.java1234.chap02;
+ 
+public class Demo19 {
+ 
+    public static void main(String[] args) {
+        int [][]arr=new int[][]{{1,2,3},{4,5,6},{7,8,9}};
+         
+        for(int i=0;i<arr.length;i++){
+            for(int j=0;j<arr[i].length;j++){
+                System.out.print(arr[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+}
 ```
 
 
@@ -116,8 +173,22 @@ arrayName=new type[length][length];
 
 动态初始化实例：
 
-```
-`package` `com.java1234.chap02;` `public` `class` `Demo19 {` `    ``public` `static` `void` `main(String[] args) {``        ``int` `[][]arr=``new` `int``[``3``][``3``];``        ` `        ``for``(``int` `i=``0``;i<arr.length;i++){``            ``for``(``int` `j=``0``;j<arr[i].length;j++){``                ``System.out.print(arr[i][j]+``" "``);``            ``}``            ``System.out.println();``        ``}``    ``}``}`
+```java
+package com.java1234.chap02;
+ 
+public class Demo19 {
+ 
+    public static void main(String[] args) {
+        int [][]arr=new int[3][3];
+         
+        for(int i=0;i<arr.length;i++){
+            for(int j=0;j<arr[i].length;j++){
+                System.out.print(arr[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+}
 ```
 
 
@@ -136,4 +207,4 @@ arrayName=new type[length][length];
 
 二维数组的内存分析：
 
-![QQ鎴浘20160806074757.jpg](http://blog.java1234.com/static/userImages/20160806/1470440951394014081.jpg)
+![1470440951394014081.jpg](assets/1470440951394014081.jpg)
