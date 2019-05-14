@@ -1373,5 +1373,251 @@ public class Demo2 {
 
 
 
+### 类的继承
 
+#### 继承定义以及基本使用
+
+定义：子类能够继承父类的属性和方法；
+
+注意点：Java中只支持单继承；
+
+​     私有方法不能继承；
+
+上代码：
+
+```java
+package com.java1234.chap03.sec09;
+ 
+/**
+ * 动物类
+ * @author user
+ *
+ */
+public class Animal {
+ 
+    private String name; // 姓名
+    private int age;  // 年龄
+     
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+     
+    public void say(){
+        System.out.println("我是一个动物，我叫："+this.name+",我的年龄是："+this.age);
+    }
+}
+```
+
+
+
+我们定义一个Animal类 定义两个私有属性 name和age 然后给出共有的set get接口  以及一个共有的say()方法；
+
+
+
+```java
+package com.java1234.chap03.sec09;
+ 
+/**
+ * 定义Dog类，继承自Animal类
+ * @author user
+ *
+ */
+public class Dog extends Animal{
+ 
+    public static void main(String[] args) {
+        Dog dog=new Dog();
+        dog.setName("Pick");
+        dog.setAge(1);
+        dog.say();
+    }
+}
+```
+
+
+
+我们再定义一个Dog类 通过extends关键字 继承Animal类；
+
+我们实际上把父类Animal的共有方法get set以及say()方法都继承了；
+
+运行输出：
+
+我是一个动物，我叫：Pick,我的年龄是：1
+
+
+
+#### 方法重写
+
+所谓方法的重写 我们可以在子类中根据实际业务把父类的方法重写；
+
+上代码：
+
+```java
+package com.java1234.chap03.sec09;
+ 
+/**
+ * 定义一个Cat类，继承自Animal
+ * @author user
+ *
+ */
+public class Cat extends Animal{
+ 
+    /**
+     * 重写父类的say方法
+     */
+    public void say(){
+        System.out.println("我是一个猫，我叫："+this.getName()+",我的年龄是："+this.getAge());
+    }
+     
+    public static void main(String[] args) {
+        Cat cat=new Cat();
+        cat.setName("Mini");
+        cat.setAge(2);
+        cat.say();
+    }
+}
+```
+
+这里 我们重写父类的say方法  改成 是猫  以及用getName和getAge，因为当前对象里继承不到父类的私有字段；
+
+
+
+运行输出：
+
+我是一个猫，我叫：Mini,我的年龄是：2
+
+
+
+#### 对象实例过程以及super关键字
+
+对象实例化 先实例化调用父类构造方法，再调用子类实例化构造方法；
+
+super关键主要是调用父类方法或者属性；
+
+
+
+我们修改下上面的实例：
+
+```java
+package com.java1234.chap03.sec09;
+ 
+/**
+ * 动物类
+ * @author user
+ *
+ */
+public class Animal {
+ 
+    private String name; // 姓名
+    private int age;  // 年龄
+     
+     
+    /**
+     * 无参父类构造方法
+     */
+    public Animal() {
+        System.out.println("无参父类构造方法");
+    }
+     
+    /**
+     * 有参父类构造方法
+     * @param name 姓名
+     * @param age 年龄
+     */
+    public Animal(String name,int age) {
+        System.out.println("有参父类构造方法");
+        this.name=name;
+        this.age=age;
+    }
+     
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+     
+    public void say(){
+        System.out.println("我是一个动物，我叫："+this.name+",我的年龄是："+this.age);
+    }
+}
+```
+
+
+
+```java
+
+package com.java1234.chap03.sec09;
+ 
+/**
+ * 定义一个Cat类，继承自Animal
+ * @author user
+ *
+ */
+public class Cat extends Animal{
+ 
+    private String address;
+     
+ 
+    public String getAddress() {
+        return address;
+    }
+ 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+ 
+    public Cat() {
+        super();
+        System.out.println("子类无参构造方法");
+    }
+ 
+    public Cat(String name, int age,String address) {
+        super(name, age);
+        this.address=address;
+        System.out.println("子类有参构造方法");
+    }
+ 
+    /**
+     * 重写父类的say方法
+     */
+    public void say(){
+        super.say(); // 调用父类的say()方法
+        System.out.println("我是一个猫，我叫："+this.getName()+",我的年龄是："+this.getAge()+"，我来自："+this.getAddress());
+    }
+     
+    public static void main(String[] args) {
+        Cat cat=new Cat("Mini",2,"火星");
+        /*cat.setName("Mini");
+        cat.setAge(2);*/
+        cat.say();
+    }
+}
+```
+
+
+
+运行输出：
+
+有参父类构造方法
+
+子类有参构造方法
+
+我是一个动物，我叫：Mini,我的年龄是：2
+
+我是一个猫，我叫：Mini,我的年龄是：2，我来自：火星
 
