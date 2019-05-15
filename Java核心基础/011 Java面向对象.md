@@ -2860,3 +2860,400 @@ dog对象是否属于Cat类：false
 我是一只猫
 
 我喜欢吃鱼
+
+
+
+### 匿名内部类
+
+
+
+内部类前面我们讲过了 就是类的内部再定义类；
+
+匿名内部类 这里指的是实例化内部对象 就是没有名字的内部类；
+
+
+
+作用：假如某个类只使用一次，则可以使用匿名内部类；
+
+
+
+我们来看一个具体实例：
+
+先定义一个接口：
+
+```java
+package com.java1234.chap03.sec16;
+ 
+public interface A {
+ 
+    public void a();
+}
+```
+
+
+
+在定义一个具体实现类：
+
+```java
+package com.java1234.chap03.sec16;
+ 
+public class B implements A{
+ 
+    @Override
+    public void a() {
+        System.out.println("a方法");
+    }
+ 
+}
+```
+
+
+
+我们来写个简单的测试类：
+
+```java
+
+package com.java1234.chap03.sec16;
+ 
+public class Test {
+ 
+    public void test(A a){
+        a.a();
+    }
+     
+    public static void main(String[] args) {
+        Test t=new Test();
+        t.test(new B());
+         
+         
+    }
+}
+```
+
+
+
+运行输出：
+
+a方法
+
+
+
+
+
+假如，我们这个地方仅仅调用一次一个test，并且没有A接口的具体实现类，这时候，匿名内部类就派上用场了；
+
+```java
+package com.java1234.chap03.sec16;
+ 
+public class Test {
+ 
+    public void test(A a){
+        a.a();
+    }
+     
+    public static void main(String[] args) {
+        Test t=new Test();
+        t.test(new B());
+         
+        // 匿名内部类
+        t.test(new A(){
+ 
+            @Override
+            public void a() {
+                System.out.println("匿名内部类，一次性使用");
+            }
+             
+        });
+    }
+}
+```
+
+
+
+运行输出：
+
+a方法
+
+匿名内部类，一次性使用
+
+
+
+这里我们直接new 接口名字即可 然后写上实现方法  之所以说匿名内部类，我们这里压根没有定义类似 A a=new B()的a对象；
+
+
+
+### 包装类
+
+
+
+每个基本类型都有一个对应的类；就是所谓的包装类；
+
+![1476948253190079045.jpg](assets/1476948253190079045.jpg)
+
+#### 装箱和拆箱
+
+基本类型和类类型可以相互转换；
+
+基本类型到类类型的转换叫做装箱；
+
+类类型到基本类型的转换叫做拆箱；
+
+
+
+我们上下示例代码：
+
+```java
+package com.java1234.chap03.sec17;
+ 
+public class Demo1 {
+ 
+    public static void main(String[] args) {
+        int a=1;
+        Integer i=new Integer(a); // 装箱
+        int b=i.intValue(); // 拆箱
+        System.out.println("a="+a);
+        System.out.println("i="+i);
+        System.out.println("b="+b);
+    }
+}
+```
+
+
+
+运行输出：
+
+a=1
+
+i=1
+
+b=1
+
+
+
+
+
+#### 自动装箱和拆箱
+
+在类类型和基本类型的转换中，是自动转换的 无需强制类型转换；
+
+我们上下示例代码：
+
+```java
+package com.java1234.chap03.sec17;
+ 
+public class Demo2 {
+ 
+    public static void main(String[] args) {
+        Integer i=1; // 自动装箱的过程 自动把基本类型转换成类类型
+        int i2=i; // 自动拆箱的过程 自动把类类型转成基本类型
+        System.out.println("i="+i);
+        System.out.println("i2="+i2);
+    }
+}
+```
+
+
+
+运行输出：
+
+i=1
+
+i2=1
+
+
+
+#### 包装类的作用
+
+这里说说包装类的作用，因为包装类是类类型 所有jdk里提供了很多有用的方法给我们用；
+
+比如从用户界面来两个字符串数据a,b 然后我们程序里要进行相加运算。这时候包装类就派上用场了，
+
+我们可以用包装类的方法类进行类型转换。我们看下示例代码：
+
+```java
+package com.java1234.chap03.sec17;
+ 
+public class Demo3 {
+ 
+    public static void main(String[] args) {
+        String a="3";
+        String b="5";
+        int m=Integer.valueOf(a); // 调用Integer类的valuesOf方法 把字符串类型转换成int类型
+        int n=Integer.valueOf(b);
+        System.out.println("a+b="+(m+n));
+    }
+}
+```
+
+
+
+运行输出：
+
+a+b=8
+
+
+
+### 设计模式
+
+#### 单例模式
+
+
+
+在长期的程序设计过程中，开发者们总结出了很多设计经验，最终经过整理和优化，变成了如今的设计模式；
+
+
+
+设计模式有很多 有单例，工厂，代理等等。这里推荐一本关于Java设计模式的书籍 Head First设计模式
+
+
+
+今天我们这里讲解的是最常用的单例模式；
+
+
+
+在Java应用中，单例对象能保证在一个JVM中，该对象只有一个实例存在；
+
+有两种实现，一种是饿汉式，一种是懒汉式；
+
+
+
+我们上下代码，先上 饿汉式实现：
+
+```java
+package com.java1234.chap03.sec18;
+ 
+public class Singleton {
+ 
+    /**
+     * 构造方法私有
+     */
+    private Singleton(){
+         
+    }
+     
+    /**
+     * 饿汉式单例实现
+     */
+    private static final Singleton single=new Singleton();
+     
+    /**
+     * 获取实例
+     */
+    public static Singleton getInstance(){
+        return single;
+    }
+}
+```
+
+
+
+
+
+
+
+这里我们构造方法私有 这样就保证了在外部是无法来实例化对象；
+
+然后我们先在内部定义一个静态常量对象，然后再写一个static方法 来返回这个对象，这样就保证是一个对象了；
+
+
+
+```java
+package com.java1234.chap03.sec18;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+        Singleton singleton1=Singleton.getInstance();
+        Singleton singleton2=Singleton.getInstance();
+        System.out.println(singleton1==singleton2);
+    }
+}
+```
+
+```
+
+```
+
+运行输出：
+
+true
+
+
+
+这里获取里两个对象 我们前面讲过 用“==”来判断对象是否指向同一个内存区域，这里返回true，说明是同一个对象；
+
+
+
+
+
+我们这里再来实现下 懒汉式子：
+
+```java
+package com.java1234.chap03.sec18;
+ 
+public class Singleton2 {
+ 
+    /**
+     * 构造方法私有
+     */
+    private Singleton2(){
+         
+    }
+     
+    /**
+     * 懒汉式单例实现 在第一次调用的时候实例化
+     */
+    private static Singleton2 single;
+     
+    /**
+     * 获取实例
+     */
+    public synchronized static Singleton2 getInstance(){
+        if(single==null){
+            System.out.println("第一次调用的实例化");
+            single=new Singleton2();
+        }
+        return single;
+    }
+}
+```
+
+
+
+我们可以看到 区别  饿汉式是先定义实例的 而懒汉式是先定义引用，当第一次调用getInstance的时候 进行对象实例化操作；
+
+当然这里我们考虑到多并发的情况 多个线程同时调用这个方法的时候，会出现问题，所以我们加了同步锁 synchronized 来保证
+
+同一时刻只有一个线程进入方法；
+
+
+
+再上下测试类：
+
+```java
+package com.java1234.chap03.sec18;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+        Singleton singleton1=Singleton.getInstance();
+        Singleton singleton2=Singleton.getInstance();
+        System.out.println("饿汉式："+(singleton1==singleton2));
+         
+        Singleton2 singleton3=Singleton2.getInstance();
+        Singleton2 singleton4=Singleton2.getInstance();
+        System.out.println("懒汉式："+(singleton3==singleton4));
+         
+    }
+}
+```
+
+
+
+运行输出：
+
+饿汉式：true
+
+第一次调用的实例化
+
+懒汉式：true
