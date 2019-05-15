@@ -1621,3 +1621,263 @@ public class Cat extends Animal{
 
 我是一个猫，我叫：Mini,我的年龄是：2，我来自：火星
 
+
+
+### final关键字
+
+
+
+final是终结 完结的意思；
+
+
+
+使用final声明的类不能被继承；
+
+使用final声明的方法不能被子类覆盖；
+
+使用final声明的变量不能被修改，即为常量；
+
+
+
+1，final修饰类
+
+
+
+我们建一个僵尸类：
+
+```java
+package com.java1234.chap03.sec10;
+ 
+/**
+ * 僵尸类
+ * @author user
+ *
+ */
+public final class JiangShi {
+ 
+}
+```
+
+
+
+这类是final修饰的，我们再建一个Test类 继承JiangShi类：
+
+![1475922132390031640.jpg](assets/1475922132390031640.jpg)
+
+
+
+我们发现 编译报错了 说不能继承final类；
+
+
+
+2，final修饰方法
+
+
+
+我们再新建一个类 ，加一个final方法：
+
+```java
+package com.java1234.chap03.sec10;
+ 
+public class People {
+ 
+    public final void action(){
+        System.out.println("做一个良好公民！");
+    }
+}
+```
+
+
+
+我们搞一个类继承下People类：
+
+![1475922723156038533.jpg](assets/1475922723156038533.jpg)
+
+
+
+我们发现，编译出错，说不能重写父类final方法；
+
+
+
+
+
+
+
+3，final修饰的变量
+
+
+
+我们在People类搞一个final属性，然后在方法里修改这个属性；
+
+![1475923150203087783.jpg](assets/1475923150203087783.jpg)
+
+
+
+我们发现，编译出错，说final字段不能修改；
+
+
+
+final修饰字段的时候 一般和static一起使用，来定义一些不可变的静态常量 方便程序使用；
+
+```java
+
+package com.java1234.chap03.sec10;
+ 
+public class Common {
+ 
+    /**
+     * 静态常量
+     */
+    public static final String CHINA_CAPITAL="北京";
+}
+```
+
+
+
+
+
+我们调用的话 直接类名.属性 即可；
+
+```java
+package com.java1234.chap03.sec10;
+ 
+public class Test{
+ 
+    public static void main(String[] args) {
+        System.out.println(Common.CHINA_CAPITAL);
+    }
+}
+```
+
+
+
+### 抽象类
+
+
+
+定义：在java中，含有抽象方法的类称为抽象类，同样不能生成对象；
+
+注意点：
+
+1，包含一个抽象方法的类是抽象类；
+
+2，抽象类和抽象方法都要用abstract关键字修饰；
+
+3，抽象方法只需要声明而不需要实现；
+
+4，抽象类必须被子类（假如不是抽象类）必须重写抽象中的全部抽象方法；
+
+5，抽象类不能被实例化；
+
+
+
+我们先来定义一个抽象类：
+
+```java
+package com.java1234.chap03.sec11;
+ 
+/**
+ * 定义一个抽象类People
+ * @author user
+ *
+ */
+public abstract class People {
+ 
+    private String name;
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+     
+    public void say(){
+        System.out.println("我的姓名是："+this.getName());
+    }
+     
+    /**
+     * 定义一个抽象方法 职业 让子类去具体实现
+     */
+    public abstract void profession();
+     
+}
+```
+
+
+
+抽象类，定义一个属性name 以及方法say() 再定义一个抽象方法 profession 具体实现让子类去实现；
+
+
+
+我们搞一个测试类：
+
+我么尝试下实例化下People类：
+
+![1475926965593003053.jpg](assets/1475926965593003053.jpg)
+
+
+
+我们会看到 编译出错，不能实例化People类；
+
+
+
+我们定义一个Student类，以及一个Teacher类：
+
+```java
+package com.java1234.chap03.sec11;
+ 
+public class Student extends People{
+ 
+    @Override
+    public void profession() {
+        System.out.println("职业是：学生");
+    }
+ 
+}
+```
+
+
+
+```java
+package com.java1234.chap03.sec11;
+ 
+public class Teacher extends People{
+ 
+    @Override
+    public void profession() {
+        System.out.println("职业是：老师");
+    }
+ 
+}
+```
+
+
+
+我们搞一个测试类：
+
+```java
+package com.java1234.chap03.sec11;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+         
+        Student student=new Student();
+        student.profession();
+         
+        Teacher teacher=new Teacher();
+        teacher.profession();
+         
+    }
+}
+```
+
+
+
+运行输出：
+
+职业是：学生
+
+职业是：老师
