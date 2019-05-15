@@ -1881,3 +1881,552 @@ public class Test {
 职业是：学生
 
 职业是：老师
+
+
+
+### 接口
+
+
+
+接口定义：一种特殊的“抽象类”，没有普通方法，由全局常量和公共的抽象方法所组成；
+
+
+
+#### 接口的定义
+
+接口定义用关键字 interface
+
+
+
+我们给下实例代码：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+/**
+ * 定义一个接口A
+ * @author user
+ *
+ */
+public interface A {
+ 
+    /**
+     * 全局常量
+     */
+    public static final String TITLE="www.java1234.com";
+     
+    /**
+     * 定义一个抽象方法 abstract可以省略  
+     */
+    public abstract void a();
+}
+```
+
+
+
+注意点：由于接口里的方法都是抽象的，所以abstract可以省略，实际开发一般都是省略的，开发者的习惯；
+
+
+
+#### 实现接口 
+
+可以实现一个或者多个接口
+
+实现接口我们用implements关键字，我们来搞一个测试方法：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+public class Test implements A{
+ 
+    @Override
+    public void a() {
+        System.out.println("a方法");
+    }
+ 
+    public static void main(String[] args) {
+        Test t=new Test();
+        t.a();
+        System.out.println(Test.TITLE);
+    }
+}
+```
+
+
+
+实现接口 ，类里要实现接口里的抽象方法；
+
+运行输出：
+
+```
+a方法
+www.java1234.com
+```
+
+
+
+为了演示实现多个接口，我们这里再定义一个接口：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+/**
+ * 定义一个接口B
+ * @author user
+ *
+ */
+public interface B {
+ 
+    /**
+     * 全局常量
+     */
+    public static final String TITLE2="java知识分享网";
+     
+    /**
+     * 定义一个抽象方法 abstract可以省略  
+     */
+    public abstract void b();
+}
+```
+
+
+
+我们修改下Test类：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+public class Test implements A,B{
+ 
+    @Override
+    public void a() {
+        System.out.println("a方法");
+    }
+     
+    @Override
+    public void b() {
+        System.out.println("b方法");
+    }
+ 
+    public static void main(String[] args) {
+        Test t=new Test();
+        t.a();
+        t.b();
+        System.out.println(Test.TITLE);
+        System.out.println(Test.TITLE2);
+    }
+ 
+     
+}
+```
+
+
+
+实现多个接口，中间用逗号隔开，并且实现所有抽象方法：
+
+运行输出：
+
+```
+a方法
+
+b方法
+
+www.java1234.com
+
+java知识分享网
+
+```
+
+
+
+#### 继承类和实现接口 
+
+> 先继承，后实现接口
+
+我们先定义一个类C：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+public class C {
+ 
+    public void c(){
+        System.out.println("c方法");
+    }
+}
+```
+
+
+
+我们再修改下测试类Test 继承C类，实现A,B接口，这里有个注意点，java规范，必须先继承后实现接口；
+
+我们上下代码：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+public class Test extends C implements A,B{
+ 
+    @Override
+    public void a() {
+        System.out.println("a方法");
+    }
+     
+    @Override
+    public void b() {
+        System.out.println("b方法");
+    }
+ 
+    public static void main(String[] args) {
+        Test t=new Test();
+        t.a();
+        t.b();
+        t.c();
+        System.out.println(Test.TITLE);
+        System.out.println(Test.TITLE2);
+    }
+ 
+     
+}
+```
+
+
+
+运行输出：
+
+```
+a方法
+
+b方法
+
+c方法
+
+www.java1234.com
+
+java知识分享网
+```
+
+
+
+#### 接口的继承  
+
+> 接口可以多继承
+
+我们定义一个D接口 继承A,B接口：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+public interface D extends A,B{
+ 
+    public void d();
+}
+```
+
+这里再加一个d方法；
+
+
+
+我们重新搞一个测试方法 继承C类，实现D接口：
+
+```java
+package com.java1234.chap03.sec12;
+ 
+public class Test2 extends C implements D{
+ 
+    @Override
+    public void a() {
+        System.out.println("a方法");
+    }
+ 
+    @Override
+    public void b() {
+        System.out.println("b方法");
+    }
+ 
+    @Override
+    public void d() {
+        System.out.println("d方法");
+    }
+ 
+    public static void main(String[] args) {
+        Test2 t=new Test2();
+        t.a();
+        t.b();
+        t.c();
+        t.d();
+        System.out.println(Test2.TITLE);
+        System.out.println(Test2.TITLE2);
+    }
+}
+```
+
+
+
+运行输出：
+
+```
+a方法
+
+b方法
+
+c方法
+
+d方法
+
+www.java1234.com
+
+java知识分享网
+```
+
+
+
+### 对象的多态性
+
+
+
+Java中的多态性表现：
+
+1，方法的重载和重写；
+
+2，可以用父类的引用指向子类的具体实现，而且可以随时更换为其他子类的具体实现；
+
+
+
+
+
+我们先搞个父类Animal:
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Animal {
+ 
+    public void say(){
+        System.out.println("我是一个动物");
+    }
+}
+```
+
+
+
+再搞两个子类，分别是Dog和Cat类，重写父类方法say：
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Cat extends Animal{
+ 
+    public void say(){
+        System.out.println("我是一个猫");
+    }
+}
+```
+
+
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Dog extends Animal{
+ 
+    public void say(){
+        System.out.println("我是一个狗");
+    }
+}
+```
+
+
+
+然后我们写个Test测试类：
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+        Dog dog=new Dog();
+        dog.say();
+         
+        Cat cat=new Cat();
+        cat.say();
+    }
+}
+```
+
+
+
+运行输出：
+
+我是一个狗
+
+我是一个猫
+
+
+
+
+
+这个大家肯定能看明白 简单的子类继承 以及实例化对象 调用方法 ；
+
+
+
+下面我来用多态测试，父类引用指向子类具体实现：
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+        // 父类引用指向Dog子类的具体实现
+        Animal animal=new Dog();
+        animal.say();
+         
+        // 更换实现
+        animal=new Cat();
+        animal.say();
+    }
+}
+```
+
+
+
+运行输出：
+
+我是一个狗
+
+我是一个猫
+
+
+
+
+
+对象的转型：
+
+向上转型：子类对象->父类对象 安全
+
+向下转型：父类对象->子类对象 不安全
+
+
+
+比如上面的实例：Animal animal=new Dog(); 就是后面的new Dog() 子类对象 向上  Animail animal 转型  是安全的；
+
+
+
+向下转型 是父类对象强制转换成子类对象：我们来改下Test类：
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+        // 父类引用指向Dog子类的具体实现
+        Animal animal=new Dog();
+        animal.say();
+         
+        // 向下转型
+        Dog dog=(Dog) animal;
+        dog.say();
+         
+        // 向下转型  因为animal指向的是Dog具体实现 所以会报错
+        Cat cat=(Cat)animal;
+        cat.say();
+    }
+}
+```
+
+
+
+运行报错：
+
+我是一个狗
+
+我是一个狗
+
+Exception in thread "main" java.lang.ClassCastException: com.java1234.chap03.sec13.Dog cannot be cast to com.java1234.chap03.sec13.Cat
+
+​	at com.java1234.chap03.sec13.Test.main(Test.java:15)
+
+
+
+转换异常 所以说向下转型是不安全的，我们必须知道具体的实现类；
+
+
+
+
+
+我们上面用的继承方式演示了多态 其实在实际开发中 更多的是用接口：
+
+我们再写一个实例：
+
+我们先建一个父类接口People:
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public interface People {
+ 
+    public void say();
+}
+```
+
+
+
+接下来写两个具体实现类,Student Teacher：
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Student implements People{
+ 
+    @Override
+    public void say() {
+        System.out.println("我是学生");
+    }
+ 
+}
+```
+
+
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Teacher implements People{
+ 
+    @Override
+    public void say() {
+        System.out.println("我是老师");
+    }
+ 
+}
+```
+
+
+
+我们来写一个测试类：
+
+```java
+package com.java1234.chap03.sec13;
+ 
+public class Test2 {
+ 
+    public static void main(String[] args) {
+        People p1=new Student();
+        p1.say();
+         
+        p1=new Teacher();
+        p1.say();
+    }
+}
+```
+
+
+
+运行输出：
+
+我是学生
+
+我是老师
