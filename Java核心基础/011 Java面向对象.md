@@ -2430,3 +2430,433 @@ public class Test2 {
 我是学生
 
 我是老师
+
+
+
+### Object类
+
+
+
+Object类是所有类的父类；
+
+
+
+Object类的常用方法
+
+1，public String toString() 返回该对象的字符串表示。
+
+2，public boolean equals(Object obj) 指示其他某个对象是否与此对象“相等”
+
+
+
+我们上一个示例：
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class A{
+ 
+    /**
+     * Object是所有类的父类
+     */
+    public A() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+ 
+}
+```
+
+
+
+我们alt+shift+s 弹出菜单 ，然后Generate Constructors from Superclass 自动从父类生成构造方法，这里的super() 我们鼠标先移动上去
+
+然后按住ctrl，然后点进去，会进入到Object类：
+
+![1476609385528081140.jpg](assets/1476609385528081140.jpg)
+
+
+
+我们可以看到父类Object所有的方法，当然我们也可以通过ctrl+o 弹出outline，
+
+![1476609416325055134.jpg](assets/1476609416325055134.jpg)
+
+
+
+
+
+
+
+接下来讲toString()方法：
+
+我们先上一个类：
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class People {
+ 
+    private String name;
+ 
+    public People(String name) {
+        super();
+        this.name = name;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+ 
+    public static void main(String[] args) {
+        People p1=new People("张三");
+        System.out.println(p1);
+        System.out.println(p1.toString());
+    }
+}
+```
+
+
+
+ 
+
+定义了一个name属性 生成了get set方法 以及main方法测试 
+
+
+
+运行输出:
+
+com.java1234.chap03.sec14.People@15db9742
+
+com.java1234.chap03.sec14.People@15db9742
+
+
+
+输出对象，默认调用的是toString()方法；
+
+
+
+这里我们通过修改toString()实现，来实现输出对象的结果：
+
+```java
+@Override
+public String toString() {
+    // TODO Auto-generated method stub
+    return super.toString();
+}
+```
+
+
+
+这里调用的是Object默认实现，我们来修改下：
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class People {
+ 
+    private String name;
+ 
+    public People(String name) {
+        super();
+        this.name = name;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+     
+     
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+ 
+    public static void main(String[] args) {
+        People p1=new People("张三");
+        System.out.println(p1);
+        System.out.println(p1.toString());
+    }
+}
+```
+
+```
+
+```
+
+运行输出：
+
+张三
+
+张三
+
+
+
+
+
+实际开发中，有时候也会用到；需要掌握；
+
+
+
+最后说下equals 是比较对象的引用，是否指向同一个堆内存；
+
+我们上下代码：
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class People {
+ 
+    private String name;
+ 
+    public People(String name) {
+        super();
+        this.name = name;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+     
+ 
+    public static void main(String[] args) {
+        People p1=new People("张三");
+        People p2=new People("张三");
+        System.out.println(p1.equals(p2));
+    }
+}
+```
+
+
+
+运行输出：
+
+false
+
+
+
+我们来重写下equals方法，来实现比较具体内容：
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class People {
+ 
+    private String name;
+ 
+    public People(String name) {
+        super();
+        this.name = name;
+    }
+ 
+    public String getName() {
+        return name;
+    }
+ 
+    public void setName(String name) {
+        this.name = name;
+    }
+     
+     
+ 
+    @Override
+    public boolean equals(Object obj) {
+        String name=((People)obj).getName();
+        return this.name==name;
+    }
+ 
+    public static void main(String[] args) {
+        People p1=new People("张三");
+        People p2=new People("张三");
+        People p3=new People("李四");
+        System.out.println("p1.equals(p2):"+p1.equals(p2));
+        System.out.println("p1.equals(p3):"+p1.equals(p3));
+    }
+}
+```
+
+
+
+运行输出：
+
+p1.equals(p2):true
+
+p1.equals(p3):false
+
+
+
+### instanceof关键字
+
+
+
+作用：判断一个对象是否属于一个类
+
+格式：对象 instanceof 类 返回布尔类型
+
+
+
+我们先来建一个父类Animal，以及子类Dog，Cat类：
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class Animal {
+ 
+    public void say(){
+        System.out.println("我是一个动物");
+    }
+}
+```
+
+
+
+```java
+
+package com.java1234.chap03.sec14;
+ 
+public class Dog extends Animal{
+ 
+    public void say(){
+        System.out.println("我是一只狗");
+    }
+}
+```
+
+
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class Cat extends Animal{
+ 
+    public void say(){
+        System.out.println("我是一只猫");
+    }
+}
+```
+
+
+
+我们搞个测试类：
+
+```java
+
+package com.java1234.chap03.sec14;
+ 
+public class Test {
+ 
+    public static void main(String[] args) {
+        Animal dog=new Dog();
+        System.out.println("dog对象是否属于Animal类："+(dog instanceof Animal));
+        System.out.println("dog对象是否属于Dog类："+(dog instanceof Dog));
+        System.out.println("dog对象是否属于Cat类："+(dog instanceof Cat));
+    }
+}
+```
+
+
+
+运行输出：
+
+dog对象是否属于Animal类：true
+
+dog对象是否属于Dog类：true
+
+dog对象是否属于Cat类：false
+
+
+
+通过instanceof我们可以确保向下转型的不出问题；
+
+
+
+我们给Dog类，Cat类加各自的方法；
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class Dog extends Animal{
+ 
+    public void say(){
+        System.out.println("我是一只狗");
+    }
+     
+    public void f1(){
+        System.out.println("汪汪...");
+    }
+}
+```
+
+
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class Cat extends Animal{
+ 
+    public void say(){
+        System.out.println("我是一只猫");
+    }
+     
+    public void f2(){
+        System.out.println("我喜欢吃鱼");
+    }
+}
+```
+
+
+
+```java
+package com.java1234.chap03.sec14;
+ 
+public class Test {
+ 
+    public static void doSomeThing(Animal animal){
+        animal.say();
+        if(animal instanceof Dog){
+            ((Dog) animal).f1();
+        }else if(animal instanceof Cat){
+            ((Cat) animal).f2();
+        }
+    }
+     
+    public static void main(String[] args) {
+        Animal dog=new Dog();
+        System.out.println("dog对象是否属于Animal类："+(dog instanceof Animal));
+        System.out.println("dog对象是否属于Dog类："+(dog instanceof Dog));
+        System.out.println("dog对象是否属于Cat类："+(dog instanceof Cat));
+         
+        doSomeThing(new Dog());
+        doSomeThing(new Cat());
+    }
+}
+```
+
+
+
+运行输出：
+
+dog对象是否属于Animal类：true
+
+dog对象是否属于Dog类：true
+
+dog对象是否属于Cat类：false
+
+我是一只狗
+
+汪汪...
+
+我是一只猫
+
+我喜欢吃鱼
