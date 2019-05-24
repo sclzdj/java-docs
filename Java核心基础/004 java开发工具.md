@@ -471,3 +471,12 @@ eclipse    菜单  windows -> preferences
 
 搜索workspace 然后编码改成UTF-8 然后  Apply  最后OK即可；
 
+
+
+## 常见快捷键
+
+> ctrl+j   快捷提示
+
+> ctrl+1 异常（try...catch...）选择
+
+> ctrl+shift+f 格式化代码
