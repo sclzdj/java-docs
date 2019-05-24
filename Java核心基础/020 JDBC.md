@@ -1231,10 +1231,191 @@ public class Demo2 {
 
 
 
-### JDBC 事务处理
+### JDBC操作事务
+
+建立一个数据库来示例操作
+
+```mysql
+CREATE DATABASE `db_bank` DEFAULT CHARACTER SET utf8;
+
+USE `db_bank`;
+
+DROP TABLE IF EXISTS `t_account`;
+
+CREATE TABLE `t_account` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `accountName` varchar(20) DEFAULT NULL,
+  `accountBalance` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+
+insert  into `t_account`(`id`,`accountName`,`accountBalance`) values (1,'张三',500),(2,'李四',1000);
+
+```
 
 
 
+#### 基本用法
+
+```java
+package com.java1234.jdbc.chap09.sec03;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.java1234.jdbc.util.DbUtil;
+
+public class Demo1 {
+	
+	private static DbUtil dbUtil=new DbUtil();
+
+	/**
+	 * 转出
+	 * @param con
+	 * @param accountName
+	 * @param account
+	 * @throws Exception
+	 */
+	private static void outCount(Connection con,String accountName,int account)throws Exception{
+		String sql="update t_account set accountBalance=accountBalance-? where accountName=?";
+		PreparedStatement pstmt=con.prepareStatement(sql);
+		pstmt.setInt(1, account);
+		pstmt.setString(2, accountName);
+		pstmt.executeUpdate();
+	}
+	
+	/**
+	 * 转入
+	 * @param con
+	 * @param accountName
+	 * @param account
+	 * @throws Exception
+	 */
+	private static void inCount(Connection con,String accountName,int account)throws Exception{
+		String sql="update t_account set account=accountBalance+? where accountName=?";
+		PreparedStatement pstmt=con.prepareStatement(sql);
+		pstmt.setInt(1, account);
+		pstmt.setString(2, accountName);
+		pstmt.executeUpdate();
+	}
+	
+	
+	public static void main(String[] args) {
+		Connection con=null;
+		try {
+			con=dbUtil.getCon(); 
+			con.setAutoCommit(false); // 取消自动提交
+			System.out.println("张三开始向李四转账！");
+			int account=500;
+			outCount(con, "张三", account);
+			inCount(con, "李四", account);
+			System.out.println("转账成功！");
+		} catch (Exception e) {
+			try {
+				con.rollback(); // 回滚
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				con.commit();  // 提交事务
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+```
 
 
-### 事务保存点
+
+#### 事务保存点
+
+```java
+package com.java1234.jdbc.chap09.sec04;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Savepoint;
+
+import com.java1234.jdbc.util.DbUtil;
+
+public class Demo1 {
+	
+	private static DbUtil dbUtil=new DbUtil();
+
+	/**
+	 * 转出
+	 * @param con
+	 * @param accountName
+	 * @param account
+	 * @throws Exception
+	 */
+	private static void outCount(Connection con,String accountName,int account)throws Exception{
+		String sql="update t_account set accountBalance=accountBalance-? where accountName=?";
+		PreparedStatement pstmt=con.prepareStatement(sql);
+		pstmt.setInt(1, account);
+		pstmt.setString(2, accountName);
+		pstmt.executeUpdate();
+	}
+	
+	/**
+	 * 转入
+	 * @param con
+	 * @param accountName
+	 * @param account
+	 * @throws Exception
+	 */
+	private static void inCount(Connection con,String accountName,int account)throws Exception{
+		String sql="update t_account set account=accountBalance+? where accountName=?";
+		PreparedStatement pstmt=con.prepareStatement(sql);
+		pstmt.setInt(1, account);
+		pstmt.setString(2, accountName);
+		pstmt.executeUpdate();
+	}
+	
+	
+	public static void main(String[] args) {
+		Connection con=null;
+		Savepoint sp=null;
+		try {
+			con=dbUtil.getCon(); 
+			con.setAutoCommit(false); // 取消自动提交
+			System.out.println("张三开始向李四转账！");
+			int account=500;
+			outCount(con, "张三", account);
+			sp=con.setSavepoint(); // 设置一个保存点
+			inCount(con, "李四", account);
+			System.out.println("转账成功！");
+		} catch (Exception e) {
+			try {
+				con.rollback(sp); // 回滚到sp保存点
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				con.commit();  // 提交事务
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+```
+
