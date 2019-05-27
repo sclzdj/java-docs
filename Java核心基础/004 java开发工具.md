@@ -473,10 +473,26 @@ eclipse    菜单  windows -> preferences
 
 
 
-## 常见快捷键
+### 常用快捷键
 
 > ctrl+j   快捷提示
 
 > ctrl+1 异常（try...catch...）选择
 
 > ctrl+shift+f 格式化代码
+
+
+
+## IDEA
+
+### 常用操作
+
+#### 自动生成器
+
+包括自动生成构造函数、get和set方法。
+
+![img](assets/1520645859974035971.jpg)
+
+### 常用快捷键
+
+>ctrl+alt+l 格式化代码

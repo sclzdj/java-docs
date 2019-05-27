@@ -2587,9 +2587,7 @@ public class People {
 }
 ```
 
-```
 
-```
 
 运行输出：
 
@@ -3078,7 +3076,7 @@ public class Demo3 {
     public static void main(String[] args) {
         String a="3";
         String b="5";
-        int m=Integer.valueOf(a); // 调用Integer类的valuesOf方法 把字符串类型转换成int类型
+        int m=Integer.valueOf(a); // 调用Integer类的valueOf方法 把字符串类型转换成int类型
         int n=Integer.valueOf(b);
         System.out.println("a+b="+(m+n));
     }
