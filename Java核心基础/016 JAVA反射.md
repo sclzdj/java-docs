@@ -307,7 +307,7 @@ public class Student {
 
 
 
-1，通过getConstructors()方法获取所有构造方法，测试类：
+1，通过getConstructors()方法获取所有构造方法，getDeclaredConstructors()方法获取当前类定义的构造方法，测试类：
 
 ```java
 package com.java1234.chap07.sec02;
@@ -347,7 +347,7 @@ com.java1234.chap07.sec02.Student
 
 
 
-2，通过getMethods()方法获取所有方法，测试类：
+2，通过getMethods()方法获取所有普通方法，getDeclaredMethods()方法获取当前类定义的普通方法，测试类：
 
 ```java
 package com.java1234.chap07.sec02;
@@ -409,7 +409,7 @@ public final native void java.lang.Object.notifyAll()
 
 
 
-3，通过getDeclaredFields()方法获取所有属性，测试类：
+3，通过getFields()方法获取所有属性，getDeclaredFields()方法获取当前类定义的普通属性，测试类：
 
 ```java
 package com.java1234.chap07.sec02;
@@ -550,7 +550,7 @@ public class Test2 {
         try {
             Object obj=c.newInstance();
             Field nameField=c.getDeclaredField("name");
-            nameField.setAccessible(true);
+            nameField.setAccessible(true);//私有属性需要这行代码才能进行设置
             nameField.set(obj, "小锋");
             System.out.println("name="+nameField.get(obj));
         } catch (Exception e) {

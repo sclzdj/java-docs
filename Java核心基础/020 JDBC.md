@@ -28,6 +28,35 @@ JDBC 是以前 SUN 公司定义的一套访问数据库的接口（没有具体�
 
 eclipse：右击项目 -> Build Path -> Configure Build Path -> Add Exteranl JARs...
 
+IntelliJ IDEA：
+
+1、创建一个目录,用来放mysql的驱动包，类似eclipse的lib目录：JDBCDemo->New->Directory。
+
+ ![img](assets/1520645859974035972.jpg)
+
+2、把mysql的jar包复制过来。 
+
+![img](assets/1520645859974035973.jpg)
+
+3、把jar包添加到项目里，类似eclipse的add to build path功能，快捷键：Ctrl+Alt+Shift+S,弹出图示菜单。 
+
+![img](assets/1520645859974035974.jpg)
+
+4、选择第一项：JARs or directories。 
+
+![1559120526104](assets/1520645859974035975.jpg)
+
+5、找到刚才添加的jar包，点击确定。 
+
+![1559120590276](assets/1520645859974035976.jpg)
+
+6、点击Apply,OK。 
+
+![OK](assets/1520645859974035977.jpg)
+
+---------------------
+
+
 > 加载数据驱动
 
 Mysql 驱动名：com.mysql.jdbc.Driver

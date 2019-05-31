@@ -493,6 +493,10 @@ eclipse    菜单  windows -> preferences
 
 ![img](assets/1520645859974035971.jpg)
 
+#### 自动生成异常
+
+（ Code | Surround with… ）然后选择“ try/catch ”
+
 ### 常用快捷键
 
 >ctrl+alt+l 格式化代码

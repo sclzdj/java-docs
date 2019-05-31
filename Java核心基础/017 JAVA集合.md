@@ -207,7 +207,7 @@ public class TestLinkedList {
         System.out.println(linkedList.pollFirst());
         pringLinkedList(linkedList);
          
-        // pollLast 榨取最后一个元素
+        // pollLast 摘取最后一个元素
         System.out.println(linkedList.pollLast());
         pringLinkedList(linkedList);
     }
