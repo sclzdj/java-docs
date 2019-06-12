@@ -120,6 +120,23 @@ Tomcat Server-->Local
 
 
 
+## IntelliJ IDEA导入servlet包
+
+1、选中项目（在IntelliJ中称为Module）；
+2、点击右键，选择open modual settings（或者直接按F4）；
+3、在弹出的窗口左端选择Libraries；
+4、点击顶端的一个类似加号“+”的图标，在右端选择第一项；
+6、在弹出的窗口中选择tomcat所在的目录，进入里面的lib目录，寻找servlet-api.jar这个jar包（如果JSP页面也有相关的JavaWeb对象，则还要寻找jsp-api.jar；如果只有Servlet，则只选择servlet-api.jar）；
+
+
+
+7、选中上述jar包，依次点击OK。
+--------------------- 
+作者：Shaun_Guo 
+来源：CSDN 
+原文：https://blog.csdn.net/shaun_guo/article/details/80250774 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
 ## Jsp基础语法
 
 ### page指令介绍
@@ -300,6 +317,8 @@ taget.jsp接受参数的代码
 ```jsp
 <%@ page import="java.util.*" %>
 ```
+
+注意：引入的类需要在page指令下面
 
 
 
@@ -498,3 +517,299 @@ taget.jsp代码这样写
 ```
 
 上面的两个页面可以在不同浏览器里面打开，也能生效
+
+
+
+### response 对象
+
+Response 内置对象和 request 内置对象是相对应的，response 内置对象用于响应客户请求，向客户端输出信息； javax.servlet.HttpServletResponse 接口
+
+> 自动刷新应用 
+
+```java
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page import="java.util.Date" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    response.setHeader("refresh","1");//一秒钟就刷新一次页面
+    Date date=new Date();
+%>
+<%=date.toString() %>
+</body>
+</html>
+
+```
+
+> 页面重定向应用 客户端跳转
+
+```java
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    response.sendRedirect("target.jsp");//跳转页面
+%>
+</body>
+</html>
+
+```
+
+> 操作 cookie 
+
+这里我们以一个记住登录信息功能为例，需要先引入servlet包
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    String username = "";
+    String password = "";
+    String remerber = "";
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("username") && cookie.getValue() != null) {
+                username = cookie.getValue();
+            }
+            if (cookie.getName().equals("password") && cookie.getValue() != null) {
+                password = cookie.getValue();
+            }
+            if (cookie.getName().equals("remerber") && cookie.getValue() != null) {
+                remerber = cookie.getValue();
+            }
+        }
+    }
+    String checked = "";
+    if (remerber.equals("remerber")) {
+        checked = "checked";
+    }
+%>
+<form action="login.jsp" method="post">
+    <div>
+        账号：<input type="text" name="username" value="<%=username%>" id="username">
+    </div>
+    <div>
+        密码：<input type="password" name="password" value="<%=password%>" id="password">
+    </div>
+    <div>
+        <input type="checkbox" name="remerber" value="remerber" id="remerber" <%=checked%>>记住
+    </div>
+    <div>
+        <input type="submit" value="提交">
+        <input type="reset" value="重置">
+    </div>
+</form>
+</body>
+</html>
+
+```
+
+login.js代码如下：
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+    String remerber = request.getParameter("remerber");
+    if ("remerber".equals(remerber)) {
+        Cookie usernameCookie = new Cookie("username", username);
+        Cookie passwordCookie = new Cookie("password", password);
+        Cookie remerberCookie = new Cookie("remerber", remerber);
+        usernameCookie.setMaxAge(60 * 60 * 24 * 7);//设置cookie有效期
+        passwordCookie.setMaxAge(60 * 60 * 24 * 7);//设置cookie有效期
+        remerberCookie.setMaxAge(60 * 60 * 24 * 7);//设置cookie有效期
+        response.addCookie(usernameCookie);//添加cookie
+        response.addCookie(passwordCookie);//添加cookie
+        response.addCookie(remerberCookie);//添加cookie
+        System.out.println("cookie设置成功");
+    } else {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("username") || cookie.getName().equals("password") || cookie.getName().equals("remerber")) {
+                    cookie.setValue(null);
+                    response.addCookie(cookie);//添加空cookie
+                }
+            }
+        }
+        System.out.println("cookie取消成功");
+    }
+%>
+<a href="demo.jsp">重新登录</a>
+</body>
+</html>
+
+```
+
+### out 对象
+
+Out 内置对象主要用来向客户端输出各种类型的数据，同时还可以管理应用服务器上的输出缓冲区。所以 out 内 置对象的方法是向客户端输出数据和管理缓冲区； 底层 javax.servlet.jsp.JspWriter 抽象类
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    int bufferSize=out.getBufferSize();//总缓存区大小
+    int remaining=out.getRemaining();//未使用缓存区大小
+    int useBufferSize=bufferSize-remaining;//已使用缓存区大小
+    out.println("总缓存区大小："+"<b>"+bufferSize+"</b></br>");
+    out.println("未使用缓存区大小："+"<b>"+remaining+"</b></br>");
+    out.println("已使用缓存区大小："+"<b>"+useBufferSize+"</b></br>");
+%>
+</body>
+</html>
+
+```
+
+### config 对象
+
+Config 内置对象是 JSP 页面通过 JSP 容器进行初始化时被传递的对象。javax.servlet.ServletConfig 。在 Servlet 初始化的时候，JPS 引擎通过 config 向它传递信息。这种信息可以是属性名和属性值匹配的参数，也可以是通过 ServletContext 对象传递的服务器的有关信息；
+
+先配置一下web.xml的Servlet初始化
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>Demo</servlet-name>
+        <jsp-file>/demo.jsp</jsp-file>
+        <init-param>
+            <param-name>c1</param-name>
+            <param-value>c1value</param-value>
+        </init-param>
+        <init-param>
+            <param-name>c2</param-name>
+            <param-value>c2value</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Demo</servlet-name>
+        <url-pattern>/demo</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
+
+demo.jsp代码如下：
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%=config.getInitParameter("c1")%>
+<%=config.getInitParameter("c2")%>
+</body>
+</html>
+
+```
+
+访问时地址要跟servlet-mapping下的url-pattern一样，上面的示例用这个链接访问http://localhost:8080/jsp_war_exploded/demo
+
+### exception 对象
+
+Exception 内置对象用来处理 JSP 文件在执行时发生的所有异常，它是 java.lang.Throwable 类的一个对象。
+
+下面来个示例：
+
+抛出异常去error页面处理：<%@ page errorPage="error.jsp"%>
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page errorPage="error.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    int a=10;
+    int b=0;
+    out.println(a/b);//这里明显会报除数不能为0的错
+%>
+</body>
+</html>
+
+```
+
+error.jsp接受错误信息，记得要写<%@ page isErrorPage="true"%>
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isErrorPage="true"%>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    if(exception!=null){
+        out.println(exception.getMessage());
+    }
+%>
+
+</body>
+</html>
+
+```
+
+### pageContext 对象
+
+pageContext 内置对象是一个比较特殊的对象。它相当于页面中所有对象功能的集合，即使用它可以访问到本页面 中所有对象。pageContext 内置对象由 Jsp 容器创建并初始化，pageContext 对象提供了对 JSP 页面所有对象及控件 的访问。
+
+来个示例：
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    pageContext.setAttribute("pageAttr","pageValue");
+    request.setAttribute("requestAttr","requestValue");
+    session.setAttribute("sessionAttr","sessionValue");
+    application.setAttribute("applicationAttr","applicationValue");
+%>
+<div>pageAttr=<%=pageContext.getAttribute("pageAttr")%></div>
+<div>requestAttr=<%=pageContext.getRequest().getAttribute("requestAttr")%></div>
+<div>sessionAttr=<%=pageContext.getSession().getAttribute("sessionAttr")%></div>
+<div>applicationAttr=<%=pageContext.getServletContext().getAttribute("applicationAttr")%></div>
+</body>
+</html>
+
+```
+
