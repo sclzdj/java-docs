@@ -128,14 +128,7 @@ Tomcat Server-->Local
 4、点击顶端的一个类似加号“+”的图标，在右端选择第一项；
 6、在弹出的窗口中选择tomcat所在的目录，进入里面的lib目录，寻找servlet-api.jar这个jar包（如果JSP页面也有相关的JavaWeb对象，则还要寻找jsp-api.jar；如果只有Servlet，则只选择servlet-api.jar）；
 
-
-
-7、选中上述jar包，依次点击OK。
---------------------- 
-作者：Shaun_Guo 
-来源：CSDN 
-原文：https://blog.csdn.net/shaun_guo/article/details/80250774 
-版权声明：本文为博主原创文章，转载请附上博文链接！
+7、选中上述jar包，依次点击OK
 
 ## Jsp基础语法
 
