@@ -431,6 +431,12 @@ taget.jsp代码这样写
 
 > 在一次会话范围中保存数据，仅供单个用户使用；javax.servlet.http.HttpSession(接口) 
 
+- 销毁当前会话域中的所有属性    session.invalidate();
+
+- 只移除特定属性名的属性   session.removeAttribute("属性名");
+
+下面来个session范围的示例
+
 第一个页面代码：
 
 ```jsp
@@ -1120,7 +1126,7 @@ public class Servlet extends HttpServlet {
 
 > 客户端跳转 response.sendRedirect("目标地址"); 
 
-> 服务器跳转：RequestDispatcherrd=request.getRequestDispatcher("目标地址"); rd.forward(request,response);
+> 服务器跳转：RequestDispatcherrd=request.getRequestDispatcher("目标地址"); rd.forward(request,response);   当然，也可以连起来用一句代码搞定
 
 下面来看个示例：
 
@@ -1156,6 +1162,7 @@ public class Servlet extends HttpServlet {
         //服务器端跳转
         RequestDispatcher requestDispatcher=request.getRequestDispatcher("target.jsp");
         requestDispatcher.forward(request,response);
+//        request.getRequestDispatcher("target.jsp").forward(request,response);//可以连起来简写
     }
 
 }
@@ -1180,3 +1187,561 @@ taget.jsp代码如下
 
 ### 用户登录功能实现
 
+> 先建一个users数据表，里面简单的id、username、password三个字段，并加一个zhangsan用户
+
+![1560408633469](assets/1560408633469.png)
+
+> 建立一个操作数据库的Db工具类
+
+需要先引入jdbc扩展包，在tomcat引入和先前不同，只需要把jdbc包拷贝到/WEB-INF/lib目录即可，没有lib目录创建即可
+
+![1560411863412](assets\1560411863412.png)
+
+```java
+package util;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class Db {
+
+    // 数据库地址
+    private static String dbUrl = "jdbc:mysql://localhost:3306/test";
+    // 用户名
+    private static String dbUserName = "root";
+    // 密码
+    private static String dbPassword = "root";
+    // 驱动名称
+    private static String jdbcName = "com.mysql.jdbc.Driver";
+
+    /**
+     * 获取数据库连接
+     *
+     * @return
+     * @throws Exception
+     */
+    public Connection getCon() throws Exception {
+        Class.forName(jdbcName);
+        Connection con = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
+        return con;
+    }
+
+    /**
+     * 关闭连接
+     *
+     * @param con
+     * @throws Exception
+     */
+    public void close(PreparedStatement pstmt, Connection con) throws Exception {
+        if (pstmt != null) {
+            pstmt.close();
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+}
+```
+
+>建一个user模型类，里面包含通过账号和密码查找是否存在用户的方法
+
+```java
+package model;
+
+import util.Db;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class User {
+    private int id;
+    private String username;
+    private String password;
+    private Db db = new Db();
+
+    public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(int id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    /*
+    根据账号和密码查询是否存在该用户，存在怎返回该用户模型，否则返回null
+     */
+    public User isHas() throws Exception {
+        Connection con = db.getCon(); // 获取连接
+        String sql = "select * from users where username=? and password=?";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, this.getUsername());
+        pstmt.setString(2, this.getPassword());
+        ResultSet rs = pstmt.executeQuery(); // 返回结果集ResultSet
+        User returnUser = null;//方法返回结果
+        while (rs.next()) {
+            if (returnUser != null) {
+                break;
+            }
+            returnUser = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"));
+        }
+        db.close(pstmt, con);//关闭连接
+        return returnUser;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+}
+```
+
+> 登录控制器和退出控制器
+
+```java
+package controller;
+
+import model.User;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+public class LoginHandle extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        User user = new User(username, password);
+        try {
+            User loginUser = user.isHas();
+            if (loginUser == null) {//不存在该用户
+                request.setAttribute("errMsg", "账号或密码错误");
+                request.setAttribute("username", username);
+                request.setAttribute("password", password);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            } else {//存在该用户
+                HttpSession session = request.getSession();
+                session.setAttribute("loginUser", loginUser);
+                response.sendRedirect("user_info.jsp");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```java
+package controller;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+public class LogoutHandle extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        session.removeAttribute("loginUser");
+        response.sendRedirect("login.jsp");
+    }
+}
+```
+
+> 修改web.xml，改了之后记得要重新编译运行哦
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>loginHandle</servlet-name>
+        <servlet-class>controller.LoginHandle</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginHandle</servlet-name>
+        <url-pattern>/loginHandle</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>logoutHandle</servlet-name>
+        <servlet-class>controller.LogoutHandle</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutHandle</servlet-name>
+        <url-pattern>/logoutHandle</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
+
+> 登录页面login.jsp代码
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.User" %>
+<html>
+<head>
+    <title>登录</title>
+</head>
+<body>
+<%
+    User user = (User) session.getAttribute("loginUser");
+    if (user != null) {
+        response.sendRedirect("user_info.jsp");
+    }
+%>
+<form action="loginHandle" method="post">
+    <h2>登录</h2>
+    <div>账号：<input type="text" name="username" value="${username }"></div>
+    <div>密码：<input type="text" name="password" value="${password }"></div>
+    <div style="color: #f00000;">${errMsg }</div>
+    <div><input type="submit" value="提交"></div>
+</form>
+</body>
+</html>
+
+```
+
+> 用户中心页面user_info.jsp代码
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="model.User" %>
+<html>
+<head>
+    <title>用户中心</title>
+</head>
+<body>
+<%
+    int id = 0;
+    String username = "";
+    String password = "";
+    User user = (User) session.getAttribute("loginUser");
+    if (user != null) {
+        id = user.getId();
+        username = user.getUsername();
+        password = user.getPassword();
+    }else{
+        response.sendRedirect("login.jsp");
+    }
+%>
+<div>
+    <%=id%>
+</div>
+<div>
+    <%=username%>
+</div>
+<div>
+    <%=password%>
+</div>
+<div>
+    <a href="logoutHandle">退出</a>
+</div>
+</body>
+</html>
+```
+
+### Servlet 过滤器
+
+像上面的登录功能，用户如果未登录去访问用户中心页面的话，我们还可以用Servlet 过滤器实现，只不过用起来比较麻烦，我不推荐这种用法。
+
+首先写个过滤器类
+
+```java
+package filter;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+public class Login implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpSession session = request.getSession();
+        String path = request.getServletPath();
+        System.out.println(path);
+        if (session.getAttribute("loginUser") == null && path.equals("/user_info.jsp")) {
+            request.getRequestDispatcher("login.jsp").forward(servletRequest, servletResponse);
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+}
+```
+
+然后改一下web.xml，改了要重启编译
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>loginHandle</servlet-name>
+        <servlet-class>controller.LoginHandle</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginHandle</servlet-name>
+        <url-pattern>/loginHandle</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>logoutHandle</servlet-name>
+        <servlet-class>controller.LogoutHandle</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logoutHandle</servlet-name>
+        <url-pattern>/logoutHandle</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>filter.Login</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>
+```
+
+这样就实现了未登录时不能进入用户中心，当然登录了就不能进入登录页面也可以用一样的原理实现。不过还是那句话，我不推荐使用这个方法。
+
+### Servlet 监听器
+
+监听 web 事件；如 application,session,request
+
+来一个监听类
+
+```java
+package listener;
+
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+
+public class SessionAttributeListener implements HttpSessionListener {
+    @Override
+    public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+        System.out.println("创建了session属性");
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+        System.out.println("销毁了session属性");
+    }
+}
+```
+
+
+
+## EL 表达式
+
+ExpressionLanguage，EL
+
+使用方法：${ }
+
+### 内置对象
+
+![1560416454587](assets/1560416454587.png)
+
+### 访问 4 种范围属性
+
+寻找值的顺序：page->request->session->application
+
+### 接收请求参数
+
+> param：单个参数 
+
+> paramValues：一组参数
+
+来个示例：
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<form action="submit.jsp?status=5" method="post">
+    <div>
+        姓名：<input type="text" name="username">
+    </div>
+    <div>
+        爱好：<input type="checkbox" name="aihao" value="足球">足球
+        &nbsp;&nbsp;<input type="checkbox" name="aihao" value="游泳">游泳
+        &nbsp;&nbsp;<input type="checkbox" name="aihao" value="学习">学习
+    </div>
+    <div>
+        <input type="submit" value="提交">
+    </div>
+</form>
+</body>
+</html>
+```
+
+submit.jsp代码如下
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<% request.setCharacterEncoding("utf-8"); %>
+<div>get状态：${param.status }</div>
+<div>姓名：${param.username }</div>
+<div>爱好1：${paramValues.aihao[0] }</div>
+<div>爱好2：${paramValues.aihao[1] }</div>
+<div>爱好3：${paramValues.aihao[2] }</div>
+</body>
+</html>
+```
+
+### 对象操作 
+
+先建个模型示例：
+
+```java
+package model;
+
+public class Student {
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+再来个el表达式操作
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page import="model.Student" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    Student student=new Student();
+    student.setName("张三");
+    student.setAge(25);
+    pageContext.setAttribute("student",student);
+%>
+<div>姓名：${student.name }</div>
+<div>年龄：${student.age }</div>
+</body>
+</html>
+```
+
+### 集合操作 
+
+直接来个示例：
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page import="java.util.LinkedList" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    LinkedList linkedList=new LinkedList();
+    linkedList.add("王五");
+    linkedList.add("李四");
+    pageContext.setAttribute("linkedList",linkedList);
+%>
+<div>${linkedList[0] }</div>
+<div>${linkedList[1] }</div>
+</body>
+</html>
+```
+
+### 运算符操作
+
+支持的运算符操作
+
+> 算数运算符，关系运算符，逻辑运算符； 
+
+> 三目运算符； 
+
+> empty关键字；使用方法：${empty name}
