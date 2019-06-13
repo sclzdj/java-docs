@@ -1744,4 +1744,4 @@ public class Student {
 
 > 三目运算符； 
 
-> empty关键字；使用方法：${empty name}
+> empty关键字；使用方法：${empty 变量名}
