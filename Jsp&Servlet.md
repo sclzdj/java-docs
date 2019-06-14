@@ -1745,3 +1745,358 @@ public class Student {
 > 三目运算符； 
 
 > empty关键字；使用方法：${empty 变量名}
+
+
+
+## JSP自定义标签
+
+### 空标签
+
+这是最简单的标签，下面来个示例
+
+```java
+package tag;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
+import java.io.IOException;
+import java.util.Date;
+
+public class ShowTime extends TagSupport {
+    @Override
+    public int doStartTag() throws JspException {
+        Date date = new Date();
+        JspWriter out = this.pageContext.getOut();
+        try {
+            out.println(date);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return TagSupport.SKIP_BODY;//直接结束标签
+    }
+}
+```
+
+再在/WEB-INF/目录下面建立一个customTag.tld文件，文件内容如下
+
+> tlib-version：文件版本号
+
+>short-name：文件名称描述，随意取
+
+>tag>name：标签名称
+>
+>tag>tag-class：标签对应的类
+>
+>tag>body-content：标签体，可以理解有标签体是标签对如：<custom>... </custom>，一般用作循环标签，用JSP表示，简单标签用scriptless表示。无标签体是独立标签如：<custom />，用empty表示
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <tlib-version>1.0</tlib-version>
+    <short-name>customTag</short-name>
+
+    <tag>
+        <name>showTime</name>
+        <tag-class>
+            tag.ShowTime
+        </tag-class>
+        <body-content>empty</body-content>
+    </tag>
+
+</taglib>
+```
+
+下面我们就可以使用了，要先引入tld文件
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="custom" uri="/WEB-INF/customTag.tld" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>custom-tag</title>
+</head>
+<body>
+<custom:showTime/>
+</body>
+</html>
+```
+
+### 自定义有属性的标签
+
+定义两个参数name、title
+
+```java
+package tag;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
+import java.io.IOException;
+
+public class ShowInfo extends TagSupport {
+    private String name;
+    private String title;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public int doStartTag() throws JspException {
+        JspWriter out = this.pageContext.getOut();
+        try {
+            out.println(this.name + " " + this.title);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return TagSupport.SKIP_BODY;//直接结束标签
+    }
+}
+```
+
+配置/WEB-INF/customTag.tld文件，没有则建立
+
+> tag>attribute>name：属性名称
+>
+> tag>attribute>required：是否比传
+>
+> tag>attribute>rtexprvalue：是否支持el表达式
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <tlib-version>1.0</tlib-version>
+    <short-name>customTag</short-name>
+
+    <tag>
+        <name>showInfo</name>
+        <tag-class>
+            tag.ShowInfo
+        </tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>
+```
+
+下面来使用这个标签
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="custom" uri="/WEB-INF/customTag.tld" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>custom-tag</title>
+</head>
+<body>
+<custom:showInfo name="张三" />
+<custom:showInfo name="张三" title="我来了"/>
+</body>
+</html>
+```
+
+### 自定义有标签体的标签
+
+一般循环标签，我们使用**自定义简单标签**实现，不用这个太麻烦了，但是也看需求，有时候还是要用这个实现。
+
+我们下面以循环list集合为例
+
+```java
+package tag;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
+import java.util.Iterator;
+import java.util.List;
+
+public class forList extends TagSupport {
+    private String var;
+    private String items;
+    private Iterator iterator;//循环遍历器，内部使用，不需要get和set方法
+
+    public String getVar() {
+        return var;
+    }
+
+    public void setVar(String var) {
+        this.var = var;
+    }
+
+    public String getItems() {
+        return items;
+    }
+
+    public void setItems(String items) {
+        this.items = items;
+    }
+
+    @Override
+    public int doStartTag() throws JspException {
+        Object value = this.pageContext.getAttribute(this.items);
+        if (value != null) {
+            if (value instanceof List) {
+                this.iterator = ((List) value).iterator();
+                if (this.iterator.hasNext()) {
+                    this.pageContext.setAttribute(this.var, this.iterator.next());
+                    return TagSupport.EVAL_BODY_INCLUDE; // 执行标签体
+                }
+            }
+        }
+        return TagSupport.SKIP_BODY;//直接结束标签
+    }
+
+    @Override
+    public int doAfterBody() throws JspException {
+        if (this.iterator.hasNext()) {
+            this.pageContext.setAttribute(this.var, this.iterator.next());
+            return TagSupport.EVAL_BODY_AGAIN; // 再执行一次标签体
+        }
+        return TagSupport.SKIP_BODY; // 直接结束标签
+    }
+}
+```
+
+配置/WEB-INF/customTag.tld文件，没有则建立
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <tlib-version>1.0</tlib-version>
+    <short-name>customTag</short-name>
+
+    <tag>
+        <name>forList</name>
+        <tag-class>
+            tag.forList
+        </tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>items</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+</taglib>
+```
+
+下面来使用这个标签
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page import="java.util.LinkedList" %>
+<%@ taglib prefix="custom" uri="/WEB-INF/customTag.tld" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>custom-tag</title>
+</head>
+<body>
+<%
+    LinkedList data = new LinkedList();
+    data.add("张三");
+    data.add("李四");
+    data.add("王五");
+    pageContext.setAttribute("data", data);
+%>
+<custom:forList items="data" var="vo">
+    <div>${vo }</div>
+</custom:forList>
+</body>
+</html>
+```
+
+### 自定义简单标签
+
+一般循环标签用这个实现，我们还是以上面的自定义有标签体的标签为例：
+
+修改一下ForList类
+
+```java
+package tag;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
+public class forList extends SimpleTagSupport {
+    private String var;
+    private String items;
+
+    public String getVar() {
+        return var;
+    }
+
+    public void setVar(String var) {
+        this.var = var;
+    }
+
+    public String getItems() {
+        return items;
+    }
+
+    public void setItems(String items) {
+        this.items = items;
+    }
+
+    @Override
+    public void doTag() throws JspException, IOException {
+        Object value = this.getJspContext().getAttribute(this.items);
+        if (value != null) {
+            if (value instanceof List) {
+                Iterator iterator = ((List) value).iterator();
+                while (iterator.hasNext()) {
+                    this.getJspContext().setAttribute(this.var, iterator.next());
+                    this.getJspBody().invoke(null); // 响应页面
+                }
+            }
+        }
+    }
+}
+```
+
+修改/WEB-INF/customTag.tld文件中的`<body-content>JSP</body-content>`为`<body-content>scriptless</body-content>`
+
+好了，我们可以向上面一样进行操作了。
