@@ -16,7 +16,11 @@ JDK (Java SE Development Kit) 就是java开发包的意思，当然里面也包�
 
 
 
-当然我们这里提供百度云下载地址：64位和32位都包括：<http://pan.baidu.com/s/1skTZIGH>
+当然我们这里提供百度云下载地址：
+
+https://pan.baidu.com/disk/home?#/all?vmode=list&path=%2Fresources%2Fjava%2Fjdk
+
+
 
 ## 安装
 

@@ -15,7 +15,9 @@ JDBC 是以前 SUN 公司定义的一套访问数据库的接口（没有具体�
 指定数据库，需要使用厂家提供的 JDBC 驱动才能连接。（这里其实就是 java 多态的一种体现，一个接口可以有
 很多具体的实现）
 
+## jar包下载
 
+链接：https://pan.baidu.com/disk/home?#/all?vmode=list&path=%2Fresources%2Fjava%2Fpackage%2Fjdbc
 
 ## 连接数据库
 
