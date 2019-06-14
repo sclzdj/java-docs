@@ -2109,10 +2109,7 @@ public class forList extends SimpleTagSupport {
 
 下面使用的简单笔记
 
-jar包地址：
-
-> 链接：https://pan.baidu.com/s/1VavAjbq0B6oKA0OemZZeHA 
-> 提取码：yh02 
+jar包地址：https://pan.baidu.com/disk/home?#/all?vmode=list&path=%2Fresources%2Fjava%2Fpackage%2Fjstl
 
 先把standard.jar和 jstl.jar文件拷贝到 /WEB-INF/lib/ 下。重新编译启动。
 
@@ -2866,10 +2863,7 @@ insert  into `t_student`(`id`,`stuNo`,`stuName`,`birthday`,`sex`) values (1,'001
 
 ### JSTL XML 标签库
 
-jar包地址：
-
-> 链接：https://pan.baidu.com/s/1VavAjbq0B6oKA0OemZZeHA 
-> 提取码：yh02 
+jar包地址：https://pan.baidu.com/disk/home?#/all?vmode=list&path=%2Fresources%2Fjava%2Fpackage%2Fjstl
 
 先把standard.jar和 jstl.jar文件拷贝到 /WEB-INF/lib/ 下。重新编译启动。
 
