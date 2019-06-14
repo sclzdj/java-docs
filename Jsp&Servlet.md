@@ -2099,4 +2099,1026 @@ public class forList extends SimpleTagSupport {
 
 修改/WEB-INF/customTag.tld文件中的`<body-content>JSP</body-content>`为`<body-content>scriptless</body-content>`
 
-好了，我们可以向上面一样进行操作了。
+好了，我们可以向上面的自定义有标签体的标签一样进行操作测试了。
+
+
+
+## Jsp 标准标签库
+
+详细教程：https://www.runoob.com/jsp/jsp-jstl.html
+
+下面使用的简单笔记
+
+jar包地址：
+
+> 链接：https://pan.baidu.com/s/1VavAjbq0B6oKA0OemZZeHA 
+> 提取码：yh02 
+
+先把standard.jar和 jstl.jar文件拷贝到 /WEB-INF/lib/ 下。重新编译启动。
+
+下面我们来讲解他的用法：
+
+先建个模型类，下面示例要用到
+
+```java
+package model;
+
+public class People {
+
+	private int id;
+	private String name;
+	private int age;
+	
+	public People(int id, String name, int age) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.age = age;
+	}
+	public People() {
+		super();
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+}
+```
+
+### JSTL 核心标签库
+
+jsp文件要引入核心标签库，代码如下：
+
+```jsp
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+```
+
+#### c:out 
+
+- c:out 内容输出标签；
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<%
+    pageContext.setAttribute("people","张三");
+%>
+<h2><c:out value="${people}"></c:out></h2>
+<h2><c:out value="${people2}" default="某人"></c:out></h2>
+</body>
+</html>
+```
+
+#### c:set
+
+- c:set 用来设置 4 中属性范围值的标签； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<c:set var="people" value="张三" scope="request"></c:set>
+<h2><c:out value="${people}"></c:out></h2>
+<jsp:useBean id="people2" class="model.People" scope="page"></jsp:useBean>
+<c:set property="id" target="${people2 }" value="007"></c:set>
+<c:set property="name" target="${people2 }" value="王二小"></c:set>
+<c:set property="age" target="${people2 }" value="16"></c:set>
+<h2>编号：${people2.id }</h2>
+<h2>姓名：${people2.name }</h2>
+<h2>年龄：${people2.age }</h2>
+</body>
+</html>
+```
+
+#### c:remove
+
+- c:remove 用来删除指定范围中的属性； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<c:set var="people" value="张三" scope="request"></c:set>
+<h2><c:out value="${people}" default="没人啊"></c:out></h2>
+<c:remove var="people" scope="request"/>
+<h2><c:out value="${people}" default="没人啊"></c:out></h2>
+</body>
+</html>
+```
+
+#### c:catch 
+
+- c:catch 用来处理程序中产生的异常； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<c:catch var="errMsg">
+    <%
+        int a=1/0;
+    %>
+</c:catch>
+<h2>异常信息：${errMsg }</h2>
+</body>
+</html>
+```
+
+#### c:if
+
+- c:if 用来条件判断； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<jsp:useBean id="people" class="model.People" scope="page"></jsp:useBean>
+<c:set property="id" target="${people }" value="007"></c:set>
+<c:set property="name" target="${people }" value="王二小"></c:set>
+<c:set property="age" target="${people }" value="16"></c:set>
+<c:if test="${people.name=='王二小' }" var="r" scope="page">
+    <h2>是王二小</h2>
+</c:if>
+<c:if test="${people.age<18 }">
+    <h2>是未成年</h2>
+</c:if>
+</body>
+</html>
+```
+
+#### c:choose
+
+- c:choose、c:when、c:otherwise 用来多条件判断； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<jsp:useBean id="people" class="model.People" scope="page"></jsp:useBean>
+<c:set property="id" target="${people }" value="007"></c:set>
+<c:set property="name" target="${people }" value="王二小"></c:set>
+<c:set property="age" target="${people }" value="19"></c:set>
+
+
+<c:choose>
+    <c:when test="${people.age<18 }">
+        <h2>小于18</h2>
+    </c:when>
+    <c:when test="${people.age==18 }">
+        <h2>等于18</h2>
+    </c:when>
+    <c:otherwise>
+        <h2>大于18</h2>
+    </c:otherwise>
+</c:choose>
+</body>
+</html>
+```
+
+#### c:forEach
+
+- c:forEach 用来遍历数组或者集合； 
+
+  > step：每次循环的步数
+  >
+  > begin：开始的位置
+  >
+  > end：结束的位置
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.People" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<%
+    String dogs[]={"小黑","小黄","小白","小小"};
+    pageContext.setAttribute("dogs",dogs);
+%>
+<c:forEach var="dog" items="${dogs }">
+    ${dog }
+</c:forEach>
+<hr/>
+<c:forEach var="dog" items="${dogs }" step="2">
+    ${dog }
+</c:forEach>
+<hr/>
+<c:forEach var="dog" items="${dogs }" begin="1" end="2">
+    ${dog }
+</c:forEach>
+<hr/>
+<%
+    List<People> pList=new ArrayList<People>();
+    pList.add(new People(1,"张三",10));
+    pList.add(new People(2,"李四",20));
+    pList.add(new People(3,"王五",30));
+    pageContext.setAttribute("pList",pList);
+%>
+<table>
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>年龄</th>
+    </tr>
+    <c:forEach var="p" items="${pList }">
+        <tr>
+            <td>${p.id }</td>
+            <td>${p.name }</td>
+            <td>${p.age }</td>
+        </tr>
+    </c:forEach>
+</table>
+</body>
+</html>
+```
+
+#### c:fortokens
+
+- c:fortokens 分隔输出； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<%
+    String str1="www.java1234.com";
+    String str2="张三，李四，王五";
+    pageContext.setAttribute("str1",str1);
+    pageContext.setAttribute("str2",str2);
+%>
+<c:forTokens items="${str1 }" delims="." var="s1">
+    ${s1 }
+</c:forTokens>
+<hr/>
+<c:forTokens items="${str2 }" delims="，" var="s2">
+    ${s2 }
+</c:forTokens>
+</body>
+</html>
+```
+
+#### c:import 
+
+- c:import 导入页面； 
+
+```java
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<c:import url="index.jsp"></c:import>
+</body>
+</html>
+```
+
+#### c:url
+
+- c:url 生成一个 url 地址； 
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<c:url value="http://www.sclzdj.cn" var="url">
+    <c:param name="name" value="dujun"></c:param>
+    <c:param name="age" value="26"></c:param>
+</c:url>
+<a href="${url }">sclzdj的主页</a>
+
+<c:url value="target.jsp" var="url">
+    <c:param name="name" value="dujun"></c:param>
+    <c:param name="age" value="26"></c:param>
+</c:url>
+<a href="${url }">项目中的跳转页</a>
+</body>
+</html>
+```
+
+#### c:redirect
+
+- c:redirect 客户端跳转
+
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jstl</title>
+</head>
+<body>
+<%--<c:redirect url="http://www.sclzdj.cn">--%>
+<%--    <c:param name="name" value="sclzdj"></c:param>--%>
+<%--    <c:param name="age" value="26"></c:param>--%>
+<%--</c:redirect>--%>
+<c:redirect url="target.jsp">
+    <c:param name="name" value="sclzdj"></c:param>
+    <c:param name="age" value="26"></c:param>
+</c:redirect>
+</body>
+</html>
+```
+
+### JSTL 国际化标签库
+
+jsp文件要引入国际化标签库，代码如下：
+
+```jsp
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+```
+
+建立两个语言文件，info_en_US.properties和info_en_US.properties文件放到项目中的src/目录下面。
+
+info_en_US.properties
+
+```
+name=xiaofeng
+info=Current user{0}:Welcome to use our system
+```
+
+info_en_US.properties  中文要编码
+
+```
+name=\u5c0f\u950b
+info=\u5f53\u524d\u7528\u6237{0}:\u6b22\u8fce\u4f7f\u7528\u672c\u7cfb\u7edf
+```
+
+这两个文件的内容可以自己定义，但是要符合标准。
+
+然后我们来测试下面的东西。
+
+#### fmt:setLocale
+
+- fmt:setLocale 设定用户所在的区域；
+
+示例见下方fmt:bundlefmt:message里面
+
+#### fmt:bundlefmt:message
+
+- fmt:bundlefmt:message 读取国际化资源；
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<fmt:setLocale value="zh_CN"/>
+<fmt:bundle basename="info">
+	<fmt:message key="name" var="userName"/>
+</fmt:bundle>
+<h2>姓名：${userName }</h2>
+<fmt:bundle basename="info">
+	<fmt:message key="info" var="infomation">
+		<fmt:param value="<font color='red'>小锋</font>"/>
+	</fmt:message>
+</fmt:bundle>
+<h2>信息：${infomation }</h2>
+<hr/>
+<fmt:setLocale value="en_US"/>
+<fmt:bundle basename="info">
+	<fmt:message key="name" var="userName"/>
+</fmt:bundle>
+<h2>姓名：${userName }</h2>
+<fmt:bundle basename="info">
+	<fmt:message key="info" var="infomation">
+		<fmt:param value="<font color='red'>小锋</font>"/>
+	</fmt:message>
+</fmt:bundle>
+<h2>信息：${infomation }</h2>
+</body>
+</html>
+```
+
+显示结果
+
+![1560502366987](assets/1560502366987.png)
+
+#### fmt:formatDate 
+
+- fmt:formatDate 对日期进行格式化； 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- value:数值 ;  type:数值类型;  pattern:格式 -->
+<%
+	Date date=new Date();
+	pageContext.setAttribute("date",date);
+%>
+<fmt:formatDate value="${date }" pattern="yyyy-MM-dd HH:mm:ss"/>
+<hr/>
+<fmt:formatDate value="${date }" pattern="yyyy-MM-dd"/>
+</body>
+</html>
+```
+
+显示结果
+
+![1560502448999](assets/1560502448999.png)
+
+#### fmt:requestEncoding
+
+- fmt:requestEncoding 设置所有的请求编码； 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<fmt:requestEncoding value="UTF-8"/>
+</body>
+</html>
+```
+
+#### fmt:formatNumber
+
+- fmt:formatNumber 格式化数字； 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- value:数值 ;  type:数值类型;  pattern:格式 -->
+<fmt:formatNumber value="12" type="currency" pattern="＄.00"/> 
+<fmt:formatNumber value="12" type="currency" pattern="＄.0#"/>
+<fmt:formatNumber value="1234567890" type="currency"/> 
+<fmt:formatNumber value="123456.7891" pattern="#,#00.0#"/>
+</body>
+</html>
+```
+
+显示结果
+
+![1560502679113](assets/1560502679113.png)
+
+#### fmt:timeZone 
+
+- fmt:timeZone 设置临时时区；
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- value:数值 ;  type:数值类型;  pattern:格式 -->
+<%
+	Date date=new Date();
+	pageContext.setAttribute("date",date);
+%>
+当前时间：<fmt:formatDate value="${date }" pattern="yyyy-MM-dd HH:mm:ss"/>
+<hr/>
+格林尼治时间：
+<fmt:timeZone value="GMT">
+   <fmt:formatDate value="${date }" pattern="yyyy-MM-dd HH:mm:ss"/>
+</fmt:timeZone>
+</body>
+</html>
+```
+
+显示结果
+
+![1560502789377](assets/1560502789377.png)
+
+### JSTL SQL 标签库
+
+要先引入jdbc包
+
+jsp文件要引入SQL 标签库，代码如下：
+
+```jsp
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+```
+
+先在数据库中运行一段sql代码，为后面的示例做准备
+
+```sql
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`db_jstl` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `db_jstl`;
+
+DROP TABLE IF EXISTS `t_student`;
+CREATE TABLE `t_student` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `stuNo` varchar(20) DEFAULT NULL,
+  `stuName` varchar(20) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `sex` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+insert  into `t_student`(`id`,`stuNo`,`stuName`,`birthday`,`sex`) values (1,'001','张三','1988-01-01','男'),(2,'002','李四','1987-02-02','男'),(3,'003','王五','1987-02-02','男'),(4,'004','小妮','1990-03-03','女');
+```
+
+#### sql:setDataDource
+
+- sql:setDataDource 设置 JDBC 连接; 
+
+这里就不演示了，因为下面都会用到
+
+#### sql:query
+
+- sql:query 数据库查询操作；
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>设置JDBC连接</h1>
+<sql:setDataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/db_jstl" user="root" password="root" />
+<sql:query var="result">
+	select * from t_student;
+</sql:query>
+<h2>总记录数：${result.rowCount }</h2>
+<table>
+	<tr>
+		<th>编号</th>
+		<th>学号</th>
+		<th>姓名</th>
+		<th>出生日期</th>
+		<th>性别</th>
+	</tr>
+	<c:forEach var="student"  items="${result.rows }">
+	<tr>
+		<td>${student.id }</td>
+		<td>${student.stuNo }</td>
+		<td>${student.stuName }</td>
+		<td>${student.birthday }</td>
+		<td>${student.sex }</td>
+	</tr>
+	</c:forEach>
+</table>
+</body>
+</html>
+```
+
+显示结果
+
+![1560503744194](assets/1560503744194.png)
+
+#### sql:update
+
+- sql:update 数据库添加，修改，删除操作； 
+
+添加
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>设置JDBC连接</h1>
+<sql:setDataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/db_jstl" user="root" password="root"/>
+<h1>添加数据</h1>
+<sql:update var="result" >
+	insert into t_student values(null,"008","张三","1991-1-1","男");
+</sql:update>
+</body>
+</html>
+```
+
+修改
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>设置JDBC连接</h1>
+<sql:setDataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/db_jstl" user="root" password="root"/>
+<h1>修改数据</h1>
+<sql:update var="result" >
+	update t_student set stuNo="010",sex="未知" where id=6
+</sql:update>
+</body>
+</html>
+```
+
+删除
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>设置JDBC连接</h1>
+<sql:setDataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/db_jstl" user="root" password="root"/>
+<h1>删除数据</h1>
+<sql:update var="result" >
+	delete from t_student where id=6
+</sql:update>
+</body>
+</html>
+```
+
+#### sql:transaction
+
+- sql:transaction 数据库事务；
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>设置JDBC连接</h1>
+<sql:setDataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/db_jstl" user="root" password="root"/>
+<h1>事务</h1>
+<sql:transaction>
+	<sql:update var="result" >
+		insert into t_student values(null,"008","张三","1991-1-1","男");
+	</sql:update>
+</sql:transaction>
+</body>
+</html>
+```
+
+### JSTL XML 标签库
+
+jar包地址：
+
+> 链接：https://pan.baidu.com/s/1VavAjbq0B6oKA0OemZZeHA 
+> 提取码：yh02 
+
+先把standard.jar和 jstl.jar文件拷贝到 /WEB-INF/lib/ 下。重新编译启动。
+
+jsp文件要引入XML 标签库，代码如下：
+
+```jsp
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+```
+
+为了下面的示例做准备，先创建两个xml文件，直接放到web目录下，即WEB-INF/目录的父级目录下。
+
+usersInfo.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<users>
+	<user>
+		<name id="n1">张三</name>
+		<birthday>2011-1-1</birthday>
+	</user>
+</users>
+```
+
+usersInfo2.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<users>
+	<user>
+		<name id="n1">张三</name>
+		<birthday>2011-1-1</birthday>
+	</user>
+	<user>
+		<name id="n2">王五</name>
+		<birthday>2011-1-2</birthday>
+	</user>
+	<user>
+		<name id="n3">赵六</name>
+		<birthday>2011-1-3</birthday>
+	</user>
+</users>
+```
+
+#### x:parse
+
+- x:parse 解析 xml； 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:import var="usersInfo" url="usersInfo.xml" charEncoding="UTF-8"/>
+<x:parse var="usersInfoXml" doc="${usersInfo }"/>
+</body>
+</html>
+```
+
+#### x:out 
+
+- x:out 输出 xml 文件的内容； 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:import var="usersInfo" url="usersInfo.xml" charEncoding="UTF-8"/>
+<x:parse var="usersInfoXml" doc="${usersInfo }"/>
+<h2>姓名：<x:out select="$usersInfoXml/users/user/name"/>
+(ID:<x:out select="$usersInfoXml/users/user/name/@id"/>)</h2>
+<h2>出生日期：<x:out select="$usersInfoXml/users/user/birthday"/></h2>
+</body>
+</html>
+```
+
+显示结果
+
+![1560505188316](assets/1560505188316.png)
+
+#### x:set 
+
+- x:set 把 xml 读取的内容保存到指定的属性范围； 
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:import var="usersInfo" url="usersInfo.xml" charEncoding="UTF-8"/>
+<x:parse var="usersInfoXml" doc="${usersInfo }"/>
+<x:set var="userInfoXml" select="$usersInfoXml/users/user"/>
+<h2>姓名：<x:out select="$userInfoXml/name"/></h2>
+</body>
+</html>
+```
+
+显示结果
+
+![1560505217608](assets/1560505217608.png)
+
+#### x:if 
+
+- x:if 判断指定路径的内容是否符合判断的条件；
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:import var="usersInfo" url="usersInfo.xml" charEncoding="UTF-8"/>
+<x:parse var="usersInfoXml" doc="${usersInfo }"/>
+<x:if select="$usersInfoXml/users/user/name/@id='n1'">
+	<h2>有编号是n1的user信息</h2>
+</x:if>
+</body>
+</html>
+```
+
+显示结果
+
+![1560505266384](assets/1560505266384.png)
+
+#### x:choose
+
+- x:choose x:when x:otherwise 多条件判断； 、
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:import var="usersInfo" url="usersInfo.xml" charEncoding="UTF-8"/>
+<x:parse var="usersInfoXml" doc="${usersInfo }"/>
+<x:choose>
+	<x:when select="$usersInfoXml/users/user/name/@id='n2'">
+		<h2>有编号是n2的user信息</h2>
+	</x:when>
+	<x:otherwise>
+		<h2>没有编号是n2的user信息</h2>
+	</x:otherwise>
+</x:choose>
+</body>
+</html>
+```
+
+显示结果
+
+![1560505330753](assets/1560505330753.png)
+
+#### x:forEach 
+
+- x:forEach 遍历
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<c:import var="usersInfo" url="usersInfo2.xml" charEncoding="UTF-8"/>
+<x:parse var="usersInfoXml" doc="${usersInfo }"/>
+<x:forEach select="$usersInfoXml/users/user" var="userInfoXml">
+	<h2>姓名：<x:out select="$userInfoXml/name"/>&nbsp;出生日期：<x:out select="$userInfoXml/birthday"/></h2>
+	<hr/>
+</x:forEach>
+</body>
+</html>
+```
+
+显示结果
+
+![1560505384730](assets/1560505384730.png)
+
+### JSTL 函数标签库
+
+jsp文件要引入函数标签库，代码如下：
+
+```jsp
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
+```
+
+下面来个简单示例
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	pageContext.setAttribute("info","www.java1234.com");
+%>
+<h2>查找java1234位置:${fn:indexOf(info,"java1234")}</h2>
+<h2>判断java1234是否存在:${fn:contains(info,"java1234")}</h2>
+<h2>截取:${fn:substring(info,0,5)}</h2>
+<h2>拆分:${fn:split(info,".")[1]}</h2>
+</body>
+</html>
+```
+
+显示结果
+
+![1560505511256](assets/1560505511256.png)
